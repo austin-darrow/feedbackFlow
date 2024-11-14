@@ -29,7 +29,7 @@ def setup_test_user_and_assignment():
     assert response.status_code == 200
     access_token = response.json()["access_token"]
 
-    db_connection = db.get_db_connection()
+    db_connection = db.get_connection()
     user = db.get_user(email, db_connection)
 
     response = client.post("/api/assignments", params={"title": "Test Assignment", "teacher_id": int(user["id"])})

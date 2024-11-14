@@ -14,7 +14,7 @@ class UserCreate(BaseModel):
 @router.post("/users", response_model=dict)
 async def create_user(user: UserCreate):
     password_hash = hash_password(user.password)
-    db_connection = db.get_db_connection()
+    db_connection = db.get_connection()
 
     existing_user = db.get_user(user.email, db_connection)
     if existing_user:

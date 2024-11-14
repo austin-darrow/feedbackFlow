@@ -24,7 +24,7 @@ async def generate_feedback(assignment_id: int, writing_sample: str, current_use
 
 @router.get("/feedback/{teacher_id}/{assignment_id}", response_model=dict)
 async def get_feedback(teacher_id: int, assignment_id: int, user_email: dict = Depends(auth.get_current_user)):
-    db_connection = db.get_db_connection()
+    db_connection = db.get_connection()
 
     teacher = db.get_user(user_email, db_connection)
     if not teacher or teacher["id"] != teacher_id:
