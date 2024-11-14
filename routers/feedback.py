@@ -10,7 +10,12 @@ class FeedbackRequest(BaseModel):
 router = APIRouter(prefix="/api", tags=["feedback"])
 
 @router.post("/feedback/{assignment_id}")
-async def generate_feedback(assignment_id: int, writing_sample: str, current_user: dict = Depends(auth.get_current_user)):
+async def generate_feedback(
+    assignment_id: int,
+    feedback_request: FeedbackRequest,
+    current_user: dict = Depends(auth.get_current_user)
+):
+    writing_sample = feedback_request.writing_sample
     teacher_id = current_user['id']
     # Verify that the assignment belongs to the teacher
     db_connection = db.get_connection()
@@ -22,12 +27,15 @@ async def generate_feedback(assignment_id: int, writing_sample: str, current_use
     return {"feedback": generated_feedback}
 
 
-@router.get("/feedback/{teacher_id}/{assignment_id}", response_model=dict)
-async def get_feedback(teacher_id: int, assignment_id: int, user_email: dict = Depends(auth.get_current_user)):
+
+@router.get("/feedback/{assignment_id}", response_model=dict)
+async def get_feedback(assignment_id: int, current_user: dict = Depends(auth.get_current_user)):
+    teacher_id = current_user['id']
     db_connection = db.get_connection()
 
-    teacher = db.get_user(user_email, db_connection)
-    if not teacher or teacher["id"] != teacher_id:
+    # Optionally, verify the assignment belongs to the teacher
+    assignment = db.get_assignment_by_id(assignment_id, db_connection)
+    if not assignment or assignment['teacher_id'] != teacher_id:
         raise HTTPException(status_code=403, detail="You do not have permission to view this feedback.")
 
     essays = db.get_essay(teacher_id, assignment_id, db_connection)
