@@ -19,7 +19,7 @@ def drop_db_tables():
     db_connection.close()
 
 def init_db():
-    # drop_db_tables()
+    drop_db_tables()
     db_connection = db.get_connection()
     db_cursor = db_connection.cursor()
 
@@ -39,6 +39,7 @@ def init_db():
         id SERIAL PRIMARY KEY,
         teacher_id INTEGER REFERENCES users (id) NOT NULL,
         title TEXT NOT NULL,
+        focus TEXT,
         created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     """

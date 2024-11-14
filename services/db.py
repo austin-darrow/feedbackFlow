@@ -63,14 +63,14 @@ def get_essay(teacher_id: int, assignment_id: int, db_connection):
     essays = [row['content'] for row in results]
     return essays
 
-def create_assignment(title: str, teacher_id: int, db_connection):
+def create_assignment(title: str, teacher_id: int, db_connection, focus: str = None):
     db_cursor = get_db_cursor(db_connection)
     insert_query = """
-    INSERT INTO assignments (teacher_id, title)
-    VALUES (%s, %s)
+    INSERT INTO assignments (teacher_id, title, focus)
+    VALUES (%s, %s, %s)
     RETURNING id;
     """
-    db_cursor.execute(insert_query, (teacher_id, title))
+    db_cursor.execute(insert_query, (teacher_id, title, focus))
     assignment_id = db_cursor.fetchone()['id']
     db_connection.commit()
     db_cursor.close()
@@ -79,7 +79,7 @@ def create_assignment(title: str, teacher_id: int, db_connection):
 def get_assignment_by_id(assignment_id: int, db_connection):
     db_cursor = get_db_cursor(db_connection)
     select_query = """
-    SELECT id, title, teacher_id
+    SELECT id, title, teacher_id, focus
     FROM assignments
     WHERE id = %s;
     """
@@ -91,7 +91,8 @@ def get_assignment_by_id(assignment_id: int, db_connection):
     assignment = {
         "id": result['id'],
         "title": result['title'],
-        "teacher_id": result['teacher_id']
+        "teacher_id": result['teacher_id'],
+        "focus": result['focus']
     }
     return assignment
 
@@ -99,12 +100,12 @@ def get_assignment_by_id(assignment_id: int, db_connection):
 def get_assignments(teacher_id: int, db_connection):
     db_cursor = get_db_cursor(db_connection)
     select_query = """
-    SELECT id, title
+    SELECT id, title, focus
     FROM assignments
     WHERE teacher_id = %s;
     """
     db_cursor.execute(select_query, (teacher_id,))
     results = db_cursor.fetchall()
     db_cursor.close()
-    assignments = [{"id": row['id'], "title": row['title']} for row in results]
+    assignments = [{"id": row['id'], "title": row['title'], "focus": row['focus']} for row in results]
     return assignments

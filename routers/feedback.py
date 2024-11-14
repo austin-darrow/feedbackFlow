@@ -10,6 +10,7 @@ class FeedbackRequest(BaseModel):
     writing_sample: str
     assignment_id: Optional[int] = None
     assignment_title: Optional[str] = None
+    focus: Optional[str] = None  # Add focus here
 
 @router.post("/feedback")
 async def generate_feedback(
@@ -19,23 +20,26 @@ async def generate_feedback(
     teacher_id = current_user['id']
     db_connection = db.get_connection()
 
-    # Determine assignment_id
+    # Determine assignment_id and focus
     assignment_id = None
+    focus = None
     if feedback_request.assignment_id:
         # Verify that the assignment belongs to the teacher
         assignment = db.get_assignment_by_id(feedback_request.assignment_id, db_connection)
         if not assignment or assignment['teacher_id'] != teacher_id:
             raise HTTPException(status_code=404, detail="Assignment not found")
         assignment_id = assignment['id']
+        focus = assignment.get('focus')
     elif feedback_request.assignment_title:
-        # Create a new assignment
-        assignment_id = db.create_assignment(feedback_request.assignment_title, teacher_id, db_connection)
+        # Create a new assignment with focus
+        assignment_id = db.create_assignment(feedback_request.assignment_title, teacher_id, db_connection, focus=feedback_request.focus)
+        focus = feedback_request.focus
     else:
         raise HTTPException(status_code=400, detail="Assignment ID or Title is required")
 
     # Generate feedback
     writing_sample = feedback_request.writing_sample
-    generated_feedback = feedback.generate_feedback(writing_sample)
+    generated_feedback = feedback.generate_feedback(writing_sample, focus=focus)
     db.insert_essay(writing_sample, generated_feedback, teacher_id, assignment_id, db_connection)
     return {"feedback": generated_feedback}
 
