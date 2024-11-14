@@ -18,7 +18,7 @@ def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 def authenticate_user(email: str, password: str):
-    db_connection = db.get_db_connection()
+    db_connection = db.get_connection()
     user = db.get_user(email, db_connection)
     if user and verify_password(password, user["password_hash"]):
         return user
@@ -49,21 +49,26 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-
 class TokenData(BaseModel):
     email: str | None = None
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
+    # Define the credentials_exception
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
+
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
         if email is None:
             raise credentials_exception
-        return email
+        db_connection = db.get_connection()
+        user = db.get_user(email, db_connection)
+        if user is None:
+            raise credentials_exception
+        return user
     except JWTError:
         raise credentials_exception

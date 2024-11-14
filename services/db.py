@@ -76,20 +76,35 @@ def create_assignment(title: str, teacher_id: int, db_connection):
     db_cursor.close()
     return assignment_id
 
-def get_assignment(title: str, teacher_id: int, db_connection):
+def get_assignment_by_id(assignment_id: int, db_connection):
     db_cursor = get_db_cursor(db_connection)
     select_query = """
-    SELECT id, title
+    SELECT id, title, teacher_id
     FROM assignments
-    WHERE teacher_id = %s AND title = %s;
+    WHERE id = %s;
     """
-    db_cursor.execute(select_query, (teacher_id, title))
+    db_cursor.execute(select_query, (assignment_id,))
     result = db_cursor.fetchone()
     db_cursor.close()
     if not result:
         return None
     assignment = {
         "id": result['id'],
-        "title": result['title']
+        "title": result['title'],
+        "teacher_id": result['teacher_id']
     }
     return assignment
+
+
+def get_assignments(teacher_id: int, db_connection):
+    db_cursor = get_db_cursor(db_connection)
+    select_query = """
+    SELECT id, title
+    FROM assignments
+    WHERE teacher_id = %s;
+    """
+    db_cursor.execute(select_query, (teacher_id,))
+    results = db_cursor.fetchall()
+    db_cursor.close()
+    assignments = [{"id": row['id'], "title": row['title']} for row in results]
+    return assignments

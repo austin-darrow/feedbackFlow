@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from pydantic import BaseModel
 from services import db
+from routers.auth import get_current_user
 from passlib.context import CryptContext
 
 router = APIRouter(prefix="/api", tags=["users"])
@@ -27,3 +28,8 @@ async def create_user(user: UserCreate):
 
 def hash_password(password: str):
     return pwd_context.hash(password)
+
+
+@router.get("/users/me")
+async def read_users_me(current_user: dict = Depends(get_current_user)):
+    return current_user
