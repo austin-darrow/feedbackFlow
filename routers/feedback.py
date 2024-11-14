@@ -2,30 +2,42 @@ from fastapi import APIRouter, Depends, HTTPException
 from services import db, feedback
 from routers import auth
 from pydantic import BaseModel
-
-
-class FeedbackRequest(BaseModel):
-    writing_sample: str
+from typing import Optional
 
 router = APIRouter(prefix="/api", tags=["feedback"])
 
-@router.post("/feedback/{assignment_id}")
+class FeedbackRequest(BaseModel):
+    writing_sample: str
+    assignment_id: Optional[int] = None
+    assignment_title: Optional[str] = None
+
+@router.post("/feedback")
 async def generate_feedback(
-    assignment_id: int,
     feedback_request: FeedbackRequest,
     current_user: dict = Depends(auth.get_current_user)
 ):
-    writing_sample = feedback_request.writing_sample
     teacher_id = current_user['id']
-    # Verify that the assignment belongs to the teacher
     db_connection = db.get_connection()
-    assignment = db.get_assignment_by_id(assignment_id, db_connection)
-    if not assignment or assignment['teacher_id'] != teacher_id:
-        raise HTTPException(status_code=404, detail="Assignment not found")
+
+    # Determine assignment_id
+    assignment_id = None
+    if feedback_request.assignment_id:
+        # Verify that the assignment belongs to the teacher
+        assignment = db.get_assignment_by_id(feedback_request.assignment_id, db_connection)
+        if not assignment or assignment['teacher_id'] != teacher_id:
+            raise HTTPException(status_code=404, detail="Assignment not found")
+        assignment_id = assignment['id']
+    elif feedback_request.assignment_title:
+        # Create a new assignment
+        assignment_id = db.create_assignment(feedback_request.assignment_title, teacher_id, db_connection)
+    else:
+        raise HTTPException(status_code=400, detail="Assignment ID or Title is required")
+
+    # Generate feedback
+    writing_sample = feedback_request.writing_sample
     generated_feedback = feedback.generate_feedback(writing_sample)
     db.insert_essay(writing_sample, generated_feedback, teacher_id, assignment_id, db_connection)
     return {"feedback": generated_feedback}
-
 
 
 @router.get("/feedback/{assignment_id}", response_model=dict)
