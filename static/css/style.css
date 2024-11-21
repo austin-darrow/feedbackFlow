@@ -5,7 +5,7 @@ body {
     font-family: 'Arial', sans-serif;
     font-size: 16px;
     line-height: 1.5;
-    background-color: #f8f9fa; /* Bootstrap's light gray */
+    background-color: red; /* Bootstrap's light gray */
     color: #212529; /* Bootstrap's dark text color */
   }
 
