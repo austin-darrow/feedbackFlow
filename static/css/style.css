@@ -2,50 +2,231 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
     font-size: 16px;
-    line-height: 1.5;
-    background-color: red; /* Bootstrap's light gray */
-    color: #212529; /* Bootstrap's dark text color */
+    line-height: 1.6;
+    background-color: #121212; /* Dark background */
+    color: #e0e0e0; /* Light text color for contrast */
   }
 
   /* .app container styles */
   .app-container {
-    max-width: 1200px; /* Keeps content centered and responsive */
+    max-width: 90vw;
     margin: 0 auto;
-    padding: 20px; /* Adds some space around the content */
-    background-color: #ffffff; /* White background for contrast */
-    border-radius: 8px; /* Rounded corners for a modern look */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    padding: 40px;
+    background-color: #1e1e1e; /* Slightly lighter than body for contrast */
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Deeper shadow for depth */
   }
 
-  /* Add spacing and alignment for headers */
+  /* Headers styling */
   h1, h2, h3 {
     margin-bottom: 20px;
-    color: #343a40; /* Bootstrap's darker gray */
+    color: #ffffff; /* Pure white for headers */
+    font-weight: 600;
   }
 
-  /* Bootstrap override for links */
+  /* Navbar styles */
+  .navbar {
+    margin-bottom: 30px;
+    background-color: #212121; /* Dark navbar */
+    border-bottom: 1px solid #333; /* Subtle border */
+  }
+
+  .navbar-brand, .navbar-nav .nav-link {
+    color: #e0e0e0 !important;
+    font-weight: 500;
+  }
+
+  .navbar-brand:hover, .navbar-nav .nav-link:hover {
+    color: #bb86fc !important; /* Accent color on hover */
+  }
+
+  /* Links */
   a {
+    color: #bb86fc; /* Accent color */
     text-decoration: none;
-    color: #0d6efd; /* Bootstrap's primary color */
   }
 
   a:hover {
+    color: #ffffff;
     text-decoration: underline;
   }
 
-  /* Additional padding for the navbar */
-  .navbar {
+  /* Buttons */
+  .btn {
+    background-color: #bb86fc;
+    color: #121212;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn:hover {
+    background-color: #9a6dd0;
+    color: #ffffff;
+  }
+
+  /* Form inputs */
+  .form-control {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #444;
+    border-radius: 4px;
+  }
+
+  .form-control:focus {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #bb86fc;
+    box-shadow: none;
+  }
+
+  /* Footer styles */
+  footer {
+    margin-top: 60px;
+    padding: 20px;
+    background-color: #1e1e1e;
+    text-align: center;
+    font-size: 14px;
+    color: #757575;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #1e1e1e;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #444444;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555555;
+  }
+
+  /* Utility classes */
+  .text-center {
+    text-align: center;
+  }
+
+  .mt-20 {
+    margin-top: 20px;
+  }
+
+  .mb-20 {
     margin-bottom: 20px;
   }
 
-  /* Footer styles if needed */
-  footer {
-    margin-top: 40px;
+  /* Card styles */
+  .card {
+    background-color: #2a2a2a;
+    border: none;
+    border-radius: 8px;
     padding: 20px;
-    background-color: #f1f3f5; /* Slightly lighter gray */
-    text-align: center;
-    font-size: 14px;
-    color: #6c757d; /* Muted text color */
+    margin-bottom: 30px;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-bottom: 15px;
+  }
+
+  .card-text {
+    color: #bdbdbd;
+  }
+
+  /* Table styles */
+  .table {
+    color: #e0e0e0;
+  }
+
+  .table thead th {
+    background-color: #2a2a2a;
+    border-bottom: 2px solid #444;
+  }
+
+  .table tbody tr {
+    border-bottom: 1px solid #333;
+  }
+
+  .table tbody tr:hover {
+    background-color: #2e2e2e;
+  }
+
+  /* Form styles */
+  .form-label {
+    color: #e0e0e0;
+  }
+
+  .form-check-input:checked {
+    background-color: #bb86fc;
+    border-color: #bb86fc;
+  }
+
+  .form-check-label {
+    color: #bdbdbd;
+  }
+
+  /* Modal styles */
+  .modal-content {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border: none;
+  }
+
+  .modal-header, .modal-footer {
+    border: none;
+  }
+
+  .modal-title {
+    color: #ffffff;
+  }
+
+  /* Tooltip and Popover */
+  .tooltip-inner {
+    background-color: #333;
+    color: #e0e0e0;
+  }
+
+  .bs-tooltip-top .arrow::before, .bs-tooltip-auto[x-placement^="top"] .arrow::before {
+    border-top-color: #333;
+  }
+
+  /* Progress bar */
+  .progress {
+    background-color: #2a2a2a;
+    border-radius: 4px;
+    height: 20px;
+  }
+
+  .progress-bar {
+    background-color: #bb86fc;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    background-color: transparent;
+  }
+
+  .breadcrumb .breadcrumb-item a {
+    color: #bb86fc;
+  }
+
+  .breadcrumb .breadcrumb-item.active {
+    color: #e0e0e0;
+  }
+
+  /* Customize Bootstrap's default focus styles */
+  *:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #bb86fc;
   }
