@@ -1,0 +1,15 @@
+/* Add basic styles to main page wrapper that will wrap all templates */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.app {
+    padding: 2rem;
+    background-color: aliceblue;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

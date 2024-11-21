@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from typing import Optional
 from fastapi.templating import Jinja2Templates
 
-router = APIRouter(prefix="/api", tags=["feedback"])
+router = APIRouter(tags=["feedback"])
 templates = Jinja2Templates(directory="templates")
 
 class FeedbackRequest(BaseModel):

@@ -6,7 +6,7 @@ from services import db
 from routers.auth import get_current_user
 from passlib.context import CryptContext
 
-router = APIRouter(prefix="/api", tags=["users"])
+router = APIRouter(tags=["users"])
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 templates = Jinja2Templates(directory="templates")
 

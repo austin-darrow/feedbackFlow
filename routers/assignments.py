@@ -9,7 +9,7 @@ class AssignmentCreate(BaseModel):
     title: str
     focus: Optional[str] = None
 
-router = APIRouter(prefix="/api", tags=["assignments"])
+router = APIRouter(tags=["assignments"])
 
 @router.post("/assignments", response_model=dict)
 async def create_assignment(assignment: AssignmentCreate, current_user: dict = Depends(get_current_user)):
