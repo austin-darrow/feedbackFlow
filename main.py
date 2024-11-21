@@ -37,8 +37,8 @@ app.include_router(feedback_router)
 app.include_router(users_router)
 app.include_router(auth_router)
 
-app.mount("/static", StaticFiles(directory="backend/static"), name="static")
-templates = Jinja2Templates(directory="backend/templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/")
