@@ -1,4 +1,6 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, HTTPException, Request, status, Depends
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from services import db
 from routers.auth import get_current_user
@@ -6,6 +8,7 @@ from passlib.context import CryptContext
 
 router = APIRouter(prefix="/api", tags=["users"])
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+templates = Jinja2Templates(directory="templates")
 
 class UserCreate(BaseModel):
     email: str
@@ -33,3 +36,8 @@ def hash_password(password: str):
 @router.get("/users/me")
 async def read_users_me(current_user: dict = Depends(get_current_user)):
     return current_user
+
+
+@router.get("/login", response_class=HTMLResponse)
+async def login(request: Request):
+    return templates.TemplateResponse('login.html', {"request": request})

@@ -1,16 +1,24 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.responses import HTMLResponse
 from services import db, feedback
 from routers import auth
 from pydantic import BaseModel
 from typing import Optional
+from fastapi.templating import Jinja2Templates
 
 router = APIRouter(prefix="/api", tags=["feedback"])
+templates = Jinja2Templates(directory="templates")
 
 class FeedbackRequest(BaseModel):
     writing_sample: str
     assignment_id: Optional[int] = None
     assignment_title: Optional[str] = None
     focus: Optional[str] = None  # Add focus here
+
+
+@router.get("/feedback", response_class=HTMLResponse)
+async def feedback_form(request: Request):
+    return templates.TemplateResponse('feedback.html', {"request": request})
 
 @router.post("/feedback")
 async def generate_feedback(
