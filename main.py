@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 import uvicorn
 import setup_db
 from contextlib import asynccontextmanager
@@ -10,6 +10,9 @@ from routers.assignments import router as assignments_router
 from routers.feedback import router as feedback_router
 from routers.users import router as users_router
 from routers.auth import router as auth_router
+
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 
 @asynccontextmanager
@@ -34,9 +37,13 @@ app.include_router(feedback_router)
 app.include_router(users_router)
 app.include_router(auth_router)
 
+app.mount("/static", StaticFiles(directory="backend/static"), name="static")
+templates = Jinja2Templates(directory="backend/templates")
+
+
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+def read_root(request: Request):
+    return templates.TemplateResponse('home.html', {"request": request})
 
 
 if __name__ == "__main__":
