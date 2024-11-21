@@ -10,7 +10,7 @@ body {
   }
 
   /* .app container styles */
-  .app {
+  .app-container {
     max-width: 1200px; /* Keeps content centered and responsive */
     margin: 0 auto;
     padding: 20px; /* Adds some space around the content */
