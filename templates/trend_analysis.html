@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="trend-analysis-container">
+    <h2>Trend Analysis for Assignment: {{ assignment.title }}</h2>
+    <p><strong>Focus:</strong> {{ assignment.focus or "N/A" }}</p>
+
+    {% if trend_analysis %}
+    <div class="analysis-results">
+        <!-- Assuming trend_analysis contains keys like 'summary', 'details', etc. -->
+        <h3>Key Findings</h3>
+        <p>{{ trend_analysis.summary }}</p>
+        <!-- Display more details as needed -->
+    </div>
+    {% else %}
+    <p>No trend analysis data available.</p>
+    {% endif %}
+
+    <div class="actions mt-20">
+        <a href="/assignments" class="btn btn-light-blue">Back to Assignments</a>
+    </div>
+</div>
+{% endblock %}

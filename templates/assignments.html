@@ -4,9 +4,10 @@
 <div class="assignments-container">
     <h2>Assignments and Essays</h2>
 
+    {% if assignments %}
     <div class="form-group">
         <label for="assignment-select">Select Assignment:</label>
-        <select id="assignment-select" class="form-control" onchange="updateAssignmentTable()">
+        <select id="assignment-select" class="form-control">
             <option value="">-- Select an Assignment --</option>
             {% for assignment in assignments %}
             <option value="{{ assignment.id }}">{{ assignment.title }}</option>
@@ -14,12 +15,14 @@
         </select>
     </div>
 
-    <div id="assignment-details" class="assignment-details mt-20" style="display: none;">
+    {% for assignment in assignments %}
+    <div id="assignment-details-{{ assignment.id }}" class="assignment-details mt-20" style="display: none;">
         <h3>Assignment Details</h3>
-        <p><strong>Title:</strong> <span id="assignment-title"></span></p>
-        <p><strong>Focus:</strong> <span id="assignment-focus"></span></p>
+        <p><strong>Title:</strong> {{ assignment.title }}</p>
+        <p><strong>Focus:</strong> {{ assignment.focus or "N/A" }}</p>
 
         <h4>Essays</h4>
+        {% if assignment.essays %}
         <table class="table">
             <thead>
                 <tr>
@@ -27,111 +30,52 @@
                     <th>Feedback</th>
                 </tr>
             </thead>
-            <tbody id="essay-table-body">
+            <tbody>
+                {% for essay in assignment.essays %}
+                <tr>
+                    <td>{{ essay.content }}</td>
+                    <td>{{ essay.feedback }}</td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
+        {% else %}
+        <p>No essays submitted for this assignment yet.</p>
+        {% endif %}
 
         <div class="actions mt-20">
-            <button id="analyze-trends-btn" class="btn btn-light-blue" onclick="analyzeTrends()">Analyze Trends</button>
+            <form action="/analyze_trends" method="post">
+                <input type="hidden" name="assignment_id" value="{{ assignment.id }}">
+                <button type="submit" class="btn btn-light-blue">Analyze Trends</button>
+            </form>
         </div>
     </div>
+    {% endfor %}
+    {% else %}
+    <p>No assignments found.</p>
+    {% endif %}
 </div>
 
-{% endblock %}
-
-{% block scripts %}
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        // Safely load assignments and essays from Jinja2 context
-        const assignmentList = JSON.parse(`{{ assignments|tojson|safe }}`);
-        const assignmentEssays = JSON.parse(`{{ assignment_essays|tojson|safe }}`);
+        const assignmentSelect = document.getElementById("assignment-select");
+        const assignmentDetailsDivs = document.querySelectorAll('.assignment-details');
 
-        console.log("Assignments:", assignmentList);
-        console.log("Assignment Essays:", assignmentEssays);
-
-        // Function to update the assignment table
-        function updateAssignmentTable() {
-            console.log("Dropdown changed");
-
-            const assignmentSelect = document.getElementById("assignment-select");
+        assignmentSelect.addEventListener("change", () => {
             const assignmentId = assignmentSelect.value;
 
-            const detailsContainer = document.getElementById("assignment-details");
-            const titleElement = document.getElementById("assignment-title");
-            const focusElement = document.getElementById("assignment-focus");
-            const tableBody = document.getElementById("essay-table-body");
-
-            if (!assignmentId) {
-                console.log("No assignment selected, hiding details container");
-                detailsContainer.style.display = "none";
-                return;
-            }
-
-            const selectedAssignment = assignmentList.find(a => a.id == parseInt(assignmentId));
-            console.log("Selected assignment:", selectedAssignment);
-
-            const essays = assignmentEssays[assignmentId] || [];
-            console.log("Essays for selected assignment:", essays);
-
-            // Update assignment details
-            titleElement.innerText = selectedAssignment.title;
-            focusElement.innerText = selectedAssignment.focus || "N/A";
-
-            // Populate the essay table
-            tableBody.innerHTML = "";
-            essays.forEach(essay => {
-                const row = document.createElement("tr");
-                const essayCell = document.createElement("td");
-                const feedbackCell = document.createElement("td");
-
-                essayCell.innerText = essay.content;
-                feedbackCell.innerText = essay.feedback;
-
-                row.appendChild(essayCell);
-                row.appendChild(feedbackCell);
-                tableBody.appendChild(row);
+            // Hide all assignment details
+            assignmentDetailsDivs.forEach(div => {
+                div.style.display = 'none';
             });
 
-            detailsContainer.style.display = "block";
-        }
-
-        // Function to analyze trends
-        function analyzeTrends() {
-            const assignmentSelect = document.getElementById("assignment-select");
-            const assignmentId = assignmentSelect.value;
-
-            if (!assignmentId) {
-                alert("Please select an assignment first.");
-                return;
+            if (assignmentId) {
+                const selectedDetails = document.getElementById(`assignment-details-${assignmentId}`);
+                if (selectedDetails) {
+                    selectedDetails.style.display = 'block';
+                }
             }
-
-            fetch(`/analyze_trends`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ assignment_id: assignmentId }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Trend analysis complete! Check console for details.");
-                        console.log(data.analysis);
-                    } else {
-                        alert("Trend analysis failed.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error analyzing trends:", error);
-                });
-        }
-
-        // Attach event listener to the dropdown
-        document.getElementById("assignment-select").addEventListener("change", updateAssignmentTable);
-
-        // Attach event listener to the analyze trends button
-        document.getElementById("analyze-trends-btn").addEventListener("click", analyzeTrends);
+        });
     });
 </script>
-
 {% endblock %}

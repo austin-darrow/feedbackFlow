@@ -103,32 +103,46 @@ async def view_assignments(request: Request, current_user: dict = Depends(auth.g
     # Fetch all assignments for the teacher
     assignments = db.get_assignments_by_teacher(teacher_id, db_connection)
 
-    # Preload essays for each assignment
-    assignment_essays = {}
+    # Fetch essays for each assignment
     for assignment in assignments:
-        essays = db.get_essays(teacher_id, assignment["id"], db_connection)
-        assignment_essays[assignment["id"]] = essays
+        essays = db.get_essay(teacher_id, assignment["id"], db_connection)
+        assignment["essays"] = essays
 
     return templates.TemplateResponse(
         "assignments.html",
         {
             "request": request,
             "assignments": assignments,
-            "assignment_essays": assignment_essays,
-            "user": current_user,
         },
     )
 
+from fastapi import Form
+
 @router.post("/analyze_trends")
-async def analyze_trends(assignment_id: int, current_user: dict = Depends(auth.get_current_user)):
+async def analyze_trends(
+    request: Request,
+    assignment_id: int = Form(...),
+    current_user: dict = Depends(auth.get_current_user)
+):
     if not current_user:
         return RedirectResponse(url="/login", status_code=302)
 
     teacher_id = current_user["id"]
     db_connection = db.get_connection()
 
-    essays = db.get_essays(teacher_id, assignment_id, db_connection)
+    # Fetch essays for the given assignment
+    essays = db.get_essay(teacher_id, assignment_id, db_connection)
 
+    # Call the `analyze_trends` function from `services.feedback`
     trend_analysis = feedback.analyze_trends(essays)
 
-    return {"success": True, "analysis": trend_analysis}
+    # Render a template to show the analysis results
+    assignment = db.get_assignment_by_id(assignment_id, db_connection)
+    return templates.TemplateResponse(
+        "trend_analysis.html",
+        {
+            "request": request,
+            "trend_analysis": trend_analysis,
+            "assignment": assignment,
+        },
+    )
