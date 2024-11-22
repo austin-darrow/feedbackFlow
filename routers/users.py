@@ -10,33 +10,31 @@ router = APIRouter(tags=["users"])
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 templates = Jinja2Templates(directory="templates")
 
-class UserCreate(BaseModel):
-    email: str
-    password: str
 
-@router.post("/users", response_model=dict)
-async def create_user(user: UserCreate):
-    password_hash = hash_password(user.password)
-    db_connection = db.get_connection()
+@router.get("/register", response_class=HTMLResponse)
+async def register_form(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
 
-    existing_user = db.get_user(user.email, db_connection)
-    if existing_user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User already exists."
+@router.post("/register")
+async def register_user(
+    request: Request, email: str = Form(...), password: str = Form(...), confirm_password: str = Form(...)
+):
+    if password != confirm_password:
+        return templates.TemplateResponse(
+            "register.html", {"request": request, "error": "Passwords do not match"}
         )
 
-    db.create_user(user.email, password_hash, db_connection)
-    return {"email": user.email}
+    db_connection = db.get_connection()
+    existing_user = db.get_user(email, db_connection)
+    if existing_user:
+        return templates.TemplateResponse(
+            "register.html", {"request": request, "error": "User already exists"}
+        )
 
-def hash_password(password: str):
-    return pwd_context.hash(password)
-
-
-@router.get("/users/me")
-async def read_users_me(current_user: dict = Depends(auth.get_current_user)):
-    return current_user
-
+    hashed_password = pwd_context.hash(password)
+    db.create_user(email, hashed_password, db_connection)
+    response = RedirectResponse(url="/login", status_code=302)
+    return response
 
 @router.get("/login", response_class=HTMLResponse)
 async def login(request: Request):
