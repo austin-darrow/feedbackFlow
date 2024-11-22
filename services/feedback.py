@@ -115,4 +115,4 @@ def analyze_trends(essays: list):
     '''
     Analyze trends in student essays.
     '''
-    return "Mock trend analysis."
+    return "This feature is coming soon!"
