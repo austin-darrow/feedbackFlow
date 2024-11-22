@@ -374,7 +374,7 @@ body {
     width: 100%;
     padding: 12px;
     background-color: #bb86fc;
-    color: #121212;
+    color: #000;
     border: none;
     border-radius: 4px;
     font-weight: 500;
@@ -432,5 +432,5 @@ body {
 }
 
 hr.solid {
-  border-top: 3px solid #bbb;
+  border-top: 2px solid #bbb;
 }
