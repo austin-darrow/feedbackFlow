@@ -388,22 +388,45 @@ body {
 }
 
 .feedback-container {
-  max-width: 800px;
-  margin: 0 auto;
+  max-width: 85vw; /* Matches the parent container width */
+  margin: 0 auto; /* Centers the container */
   padding: 20px;
-}
-
-.feedback-result {
-  background: #f9f9f9;
-  padding: 20px;
+  background: #f9f9f9; /* Subtle background for readability */
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
 }
 
-.feedback-essay, .feedback-text {
-  background: #e8f4fa;
-  padding: 10px;
+/* Sections for assignment and essay feedback */
+.output-section, .essay-section {
+  margin-bottom: 20px;
+}
+
+/* Text areas for essay content and feedback */
+.essay-content, .essay-feedback {
+  background: #e8f4fa; /* Light blue for differentiation */
+  padding: 15px;
   border-radius: 4px;
-  white-space: pre-wrap;
-  font-family: monospace;
+  white-space: pre-wrap; /* Wraps text to fit inside container */
+  word-wrap: break-word; /* Breaks long words to avoid overflow */
+  overflow-x: auto; /* Enables horizontal scrolling for long lines */
+  font-family: monospace; /* Fixed-width font for better text alignment */
+  font-size: 14px; /* Slightly smaller text size for essays */
+}
+
+/* Button styling */
+.actions .btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  background-color: #add8e6; /* Light blue */
+  color: #000;
+  border: 1px solid #87ceeb;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.actions .btn:hover {
+  background-color: #87ceeb; /* Darker blue on hover */
+  color: #fff; /* White text on hover */
 }
