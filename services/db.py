@@ -2,16 +2,19 @@ import psycopg2
 import os
 from psycopg2.extras import RealDictCursor
 
+# Database connection URL
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
 def get_connection():
+    """Get a database connection."""
     return psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
 
 def get_db_cursor(db_connection):
-    db_cursor = db_connection.cursor()
-    return db_cursor
+    """Get a cursor for the given database connection."""
+    return db_connection.cursor()
 
 def create_user(email: str, password_hash: str, db_connection):
+    """Create a new user in the database."""
     db_cursor = get_db_cursor(db_connection)
     insert_query = """
     INSERT INTO users (email, password_hash)
@@ -22,6 +25,7 @@ def create_user(email: str, password_hash: str, db_connection):
     db_cursor.close()
 
 def get_user(email: str, db_connection):
+    """Retrieve a user by email."""
     db_cursor = get_db_cursor(db_connection)
     select_query = """
     SELECT id, email, password_hash
@@ -31,45 +35,48 @@ def get_user(email: str, db_connection):
     db_cursor.execute(select_query, (email,))
     result = db_cursor.fetchone()
     db_cursor.close()
-    if not result:
-        return None
-    user = {
-        "id": result['id'],
-        "email": result['email'],
-        "password_hash": result['password_hash']
-    }
-    return user
+    return result  # Already a dictionary because of RealDictCursor
 
 def insert_essay(writing_sample, feedback, teacher_id, assignment_id, db_connection):
+    """Insert an essay and its generated feedback into the database."""
     query = """
     INSERT INTO essays (writing_sample, feedback, teacher_id, assignment_id)
-    VALUES (?, ?, ?, ?)
+    VALUES (%s, %s, %s, %s);
     """
     db_cursor = get_db_cursor(db_connection)
     db_cursor.execute(query, (writing_sample, feedback, teacher_id, assignment_id))
     db_connection.commit()
+    db_cursor.close()
 
 def get_essay(teacher_id: int, assignment_id: int, db_connection):
+    """Retrieve essays by teacher and assignment."""
     db_cursor = get_db_cursor(db_connection)
     select_query = """
-    SELECT content
+    SELECT writing_sample, feedback
     FROM essays
     WHERE teacher_id = %s AND assignment_id = %s;
     """
     db_cursor.execute(select_query, (teacher_id, assignment_id))
     results = db_cursor.fetchall()
     db_cursor.close()
-    essays = [row['content'] for row in results]
-    return essays
+    return results
 
 def create_assignment(title, teacher_id, db_connection, focus=None):
-    query = "INSERT INTO assignments (title, teacher_id, focus) VALUES (?, ?, ?)"
+    """Create a new assignment."""
+    query = """
+    INSERT INTO assignments (title, teacher_id, focus)
+    VALUES (%s, %s, %s)
+    RETURNING id;
+    """
     db_cursor = get_db_cursor(db_connection)
-    cursor = db_cursor.execute(query, (title, teacher_id, focus))
+    db_cursor.execute(query, (title, teacher_id, focus))
+    assignment_id = db_cursor.fetchone()["id"]
     db_connection.commit()
-    return cursor.lastrowid
+    db_cursor.close()
+    return assignment_id
 
 def get_assignment_by_id(assignment_id: int, db_connection):
+    """Retrieve an assignment by its ID."""
     db_cursor = get_db_cursor(db_connection)
     select_query = """
     SELECT id, title, teacher_id, focus
@@ -79,18 +86,17 @@ def get_assignment_by_id(assignment_id: int, db_connection):
     db_cursor.execute(select_query, (assignment_id,))
     result = db_cursor.fetchone()
     db_cursor.close()
-    if not result:
-        return None
-    assignment = {
-        "id": result['id'],
-        "title": result['title'],
-        "teacher_id": result['teacher_id'],
-        "focus": result['focus']
-    }
-    return assignment
-
+    return result
 
 def get_assignments_by_teacher(teacher_id, db_connection):
-    query = "SELECT id, title, focus FROM assignments WHERE teacher_id = ?"
+    """Retrieve all assignments for a given teacher."""
+    query = """
+    SELECT id, title, focus
+    FROM assignments
+    WHERE teacher_id = %s;
+    """
     db_cursor = get_db_cursor(db_connection)
-    return db_cursor.execute(query, (teacher_id,)).fetchall()
+    db_cursor.execute(query, (teacher_id,))
+    results = db_cursor.fetchall()
+    db_cursor.close()
+    return results
