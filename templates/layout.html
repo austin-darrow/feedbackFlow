@@ -4,23 +4,14 @@
         <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     </head>
     <body>
+        {% include 'navbar.html' %}
         <div class="app-container">
-            {% include 'navbar.html' %}
             {% include 'error.html' %}
             {% block content %}
             {% endblock %}
         </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const navbarToggle = document.getElementById('navbarToggle');
-                const navbarMenu = document.getElementById('navbarMenu');
-
-                navbarToggle.addEventListener('click', function() {
-                    navbarMenu.classList.toggle('active');
-                });
-            });
-        </script>
+        {% block scripts %}
+        {% endblock %}
 
     </body>
 </html>
