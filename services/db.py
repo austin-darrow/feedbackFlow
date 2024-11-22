@@ -51,7 +51,7 @@ def insert_essay(content, feedback, teacher_id, assignment_id, db_connection) ->
     db_cursor.close()
     return essay_id
 
-def get_essay(teacher_id: int, assignment_id: int, db_connection):
+def get_essays(teacher_id: int, assignment_id: int, db_connection):
     """Retrieve essays by teacher and assignment."""
     db_cursor = get_db_cursor(db_connection)
     select_query = """
@@ -63,6 +63,19 @@ def get_essay(teacher_id: int, assignment_id: int, db_connection):
     results = db_cursor.fetchall()
     db_cursor.close()
     return results  # Returns a list of dictionaries with "content" and "feedback"
+
+def get_essay_by_id(essay_id: int, db_connection):
+    """Retrieve an essay by its ID."""
+    db_cursor = get_db_cursor(db_connection)
+    select_query = """
+    SELECT content, feedback
+    FROM essays
+    WHERE id = %s;
+    """
+    db_cursor.execute(select_query, (essay_id,))
+    result = db_cursor.fetchone()
+    db_cursor.close()
+    return result
 
 
 def create_assignment(title, teacher_id, db_connection, focus=None) -> int:
