@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from services import db, feedback
 from routers import auth
 from pydantic import BaseModel
@@ -31,37 +31,76 @@ async def generate_feedback(
     focus: Optional[str] = Form(None),
     current_user: dict = Depends(auth.get_current_user),
 ):
+    if not current_user:
+        return RedirectResponse(url="/login", status_code=307)
+
     teacher_id = current_user["id"]
     db_connection = db.get_connection()
-    print(locals())
+
+    # Preprocess assignment_id
+    assignment_id = int(assignment_id) if assignment_id and assignment_id.strip() else None
 
     # Handle assignment selection or creation
     if assignment_id:
-        # Validate existing assignment belongs to teacher
-        assignment = db.get_assignment_by_id(int(assignment_id), db_connection)
+        assignment = db.get_assignment_by_id(assignment_id, db_connection)
         if not assignment or assignment["teacher_id"] != teacher_id:
             raise HTTPException(status_code=404, detail="Assignment not found")
         focus = assignment.get("focus") or focus
     elif assignment_title:
-        # Create new assignment
         assignment_id = db.create_assignment(assignment_title, teacher_id, db_connection, focus=focus)
     else:
         raise HTTPException(status_code=400, detail="Assignment ID or Title is required")
 
     # Generate feedback
     generated_feedback = feedback.generate_feedback(writing_sample, focus=focus)
-    db.insert_essay(writing_sample, generated_feedback, teacher_id, assignment_id, db_connection)
+    essay_id = db.insert_essay(writing_sample, generated_feedback, teacher_id, assignment_id, db_connection)
 
-    # Render feedback on the page
-    feedback_result = {
-        "assignment_title": assignment_title or assignment["title"],
-        "focus": focus,
-        "writing_sample": writing_sample,
-        "generated_feedback": generated_feedback,
-    }
+    # Redirect to the new output route
+    return RedirectResponse(url=f"/feedback/show?assignment_id={assignment_id}&essay_id={essay_id}", status_code=302)
 
-    assignments = db.get_assignments_by_teacher(teacher_id, db_connection)
+
+@router.get("/feedback/show", response_class=HTMLResponse)
+async def show_feedback(
+    request: Request,
+    assignment_id: int,
+    essay_id: int,
+    current_user: dict = Depends(auth.get_current_user),
+):
+    if not current_user:
+        return RedirectResponse(url="/login", status_code=307)
+
+    teacher_id = current_user["id"]
+    db_connection = db.get_connection()
+
+    # Fetch assignment
+    assignment = db.get_assignment_by_id(assignment_id, db_connection)
+    if not assignment or assignment["teacher_id"] != teacher_id:
+        raise HTTPException(status_code=403, detail="You do not have permission to view this feedback.")
+
+    # Fetch specific essay
+    essay = db.get_essay_by_id(essay_id, db_connection)
+    if not essay or essay["teacher_id"] != teacher_id:
+        raise HTTPException(status_code=404, detail="Essay not found.")
+
     return templates.TemplateResponse(
-        "feedback.html",
-        {"request": request, "assignments": assignments, "feedback": feedback_result, "user": current_user}
+        "feedback_show.html",
+        {
+            "request": request,
+            "assignment": assignment,
+            "essay": essay,
+            "user": current_user,
+        },
     )
+
+
+@router.get("/feedback/assignment/{assignment_id}", response_class=HTMLResponse)
+async def assignment_feedback(
+    assignment_id: int,
+    request: Request,
+    current_user: dict = Depends(auth.get_current_user),
+):
+    if not current_user:
+        return RedirectResponse(url="/login", status_code=307)
+
+    teacher_id = current_user["id"]
+    db_connection = db.get_connection()

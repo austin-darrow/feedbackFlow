@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="feedback-container">
+    <h2>Feedback Generated</h2>
+    <div class="output-section">
+        <h3>Assignment: {{ assignment.title }}</h3>
+        <p><strong>Focus:</strong> {{ assignment.focus or "N/A" }}</p>
+    </div>
+
+    <div class="essay-section">
+        <h4>Student Essay</h4>
+        <pre class="essay-content">{{ essay.content }}</pre>
+        <h4>Feedback</h4>
+        <pre class="essay-feedback">{{ essay.feedback }}</pre>
+    </div>
+
+    <div class="actions mt-20">
+        <a href="/feedback" class="btn btn-light-blue">Submit Another Essay</a>
+    </div>
+</div>
+{% endblock %}
