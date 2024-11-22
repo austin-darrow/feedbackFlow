@@ -26,18 +26,19 @@ async def feedback_form(request: Request, current_user: dict = Depends(auth.get_
 async def generate_feedback(
     request: Request,
     writing_sample: str = Form(...),
-    assignment_id: Optional[int] = Form(None),
+    assignment_id: Optional[str] = Form(None),
     assignment_title: Optional[str] = Form(None),
     focus: Optional[str] = Form(None),
     current_user: dict = Depends(auth.get_current_user),
 ):
     teacher_id = current_user["id"]
     db_connection = db.get_connection()
+    print(locals())
 
     # Handle assignment selection or creation
     if assignment_id:
         # Validate existing assignment belongs to teacher
-        assignment = db.get_assignment_by_id(assignment_id, db_connection)
+        assignment = db.get_assignment_by_id(int(assignment_id), db_connection)
         if not assignment or assignment["teacher_id"] != teacher_id:
             raise HTTPException(status_code=404, detail="Assignment not found")
         focus = assignment.get("focus") or focus
