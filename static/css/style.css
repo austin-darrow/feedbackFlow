@@ -448,8 +448,7 @@ hr.solid {
 .section {
   margin-bottom: 40px;
   padding: 20px;
-  background: #000;
-  color: white;
+  color: snow;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -457,7 +456,7 @@ hr.solid {
 .section h2 {
   margin-bottom: 10px;
   font-size: 1.5rem;
-  color: #333;
+  color: snow;
 }
 
 .section p {
