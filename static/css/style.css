@@ -391,7 +391,7 @@ body {
   max-width: 85vw; /* Matches the parent container width */
   margin: 0 auto; /* Centers the container */
   padding: 20px;
-  background: #f9f9f9; /* Subtle background for readability */
+  background: #1e1e1e;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
 }
@@ -403,7 +403,7 @@ body {
 
 /* Text areas for essay content and feedback */
 .essay-content, .essay-feedback {
-  background: #e8f4fa; /* Light blue for differentiation */
+  background: #1e1e1e;
   padding: 15px;
   border-radius: 4px;
   white-space: pre-wrap; /* Wraps text to fit inside container */
@@ -420,13 +420,13 @@ body {
   font-size: 16px;
   text-decoration: none;
   border-radius: 4px;
-  background-color: #add8e6; /* Light blue */
+  background: #1e1e1e;
   color: #000;
-  border: 1px solid #87ceeb;
+  border: 1px solid #444;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .actions .btn:hover {
-  background-color: #87ceeb; /* Darker blue on hover */
-  color: #fff; /* White text on hover */
+  background-color: #9a6dd0;
+  color: #ffffff;
 }
