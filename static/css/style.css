@@ -441,13 +441,15 @@ hr.solid {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  background-color: #000;
 }
 
 /* Section styles */
 .section {
   margin-bottom: 40px;
   padding: 20px;
-  background: #f9f9f9;
+  background: #000;
+  color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -471,13 +473,4 @@ hr.solid {
 
 .section ul li, .section ol li {
   margin-bottom: 5px;
-}
-
-.section a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.section a:hover {
-  text-decoration: underline;
 }
