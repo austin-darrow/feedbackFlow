@@ -45,7 +45,8 @@ def insert_essay(writing_sample, feedback, teacher_id, assignment_id, db_connect
     INSERT INTO essays (writing_sample, feedback, teacher_id, assignment_id)
     VALUES (?, ?, ?, ?)
     """
-    db_connection.execute(query, (writing_sample, feedback, teacher_id, assignment_id))
+    db_cursor = get_db_cursor(db_connection)
+    db_cursor.execute(query, (writing_sample, feedback, teacher_id, assignment_id))
     db_connection.commit()
 
 def get_essay(teacher_id: int, assignment_id: int, db_connection):
@@ -63,7 +64,8 @@ def get_essay(teacher_id: int, assignment_id: int, db_connection):
 
 def create_assignment(title, teacher_id, db_connection, focus=None):
     query = "INSERT INTO assignments (title, teacher_id, focus) VALUES (?, ?, ?)"
-    cursor = db_connection.execute(query, (title, teacher_id, focus))
+    db_cursor = get_db_cursor(db_connection)
+    cursor = db_cursor.execute(query, (title, teacher_id, focus))
     db_connection.commit()
     return cursor.lastrowid
 
@@ -90,4 +92,5 @@ def get_assignment_by_id(assignment_id: int, db_connection):
 
 def get_assignments_by_teacher(teacher_id, db_connection):
     query = "SELECT id, title, focus FROM assignments WHERE teacher_id = ?"
-    return db_connection.execute(query, (teacher_id,)).fetchall()
+    db_cursor = get_db_cursor(db_connection)
+    return db_cursor.execute(query, (teacher_id,)).fetchall()
