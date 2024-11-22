@@ -109,3 +109,10 @@ Grow: [constructive feedback]
     print(response)
 
     return response
+
+
+def analyze_trends(essays: list):
+    '''
+    Analyze trends in student essays.
+    '''
+    pass

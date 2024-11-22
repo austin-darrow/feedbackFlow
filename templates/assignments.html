@@ -1,0 +1,113 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="assignments-container">
+    <h2>Assignments and Essays</h2>
+
+    <div class="form-group">
+        <label for="assignment-select">Select Assignment:</label>
+        <select id="assignment-select" class="form-control" onchange="updateAssignmentTable()">
+            <option value="">-- Select an Assignment --</option>
+            {% for assignment in assignments %}
+            <option value="{{ assignment.id }}">{{ assignment.title }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div id="assignment-details" class="assignment-details mt-20" style="display: none;">
+        <h3>Assignment Details</h3>
+        <p><strong>Title:</strong> <span id="assignment-title"></span></p>
+        <p><strong>Focus:</strong> <span id="assignment-focus"></span></p>
+
+        <h4>Essays</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student Essay</th>
+                    <th>Feedback</th>
+                </tr>
+            </thead>
+            <tbody id="essay-table-body">
+            </tbody>
+        </table>
+
+        <div class="actions mt-20">
+            <button id="analyze-trends-btn" class="btn btn-light-blue" onclick="analyzeTrends()">Analyze Trends</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const assignmentList = JSON.parse('{{ assignments|tojson|escapejs }}');
+    const assignmentEssays = JSON.parse('{{ assignment_essays|tojson|escapejs }}');
+
+    function updateAssignmentTable() {
+        const assignmentSelect = document.getElementById("assignment-select");
+        const assignmentId = assignmentSelect.value;
+
+        const detailsContainer = document.getElementById("assignment-details");
+        const titleElement = document.getElementById("assignment-title");
+        const focusElement = document.getElementById("assignment-focus");
+        const tableBody = document.getElementById("essay-table-body");
+
+        if (!assignmentId) {
+            detailsContainer.style.display = "none";
+            return;
+        }
+
+        const selectedAssignment = assignmentList.find(a => a.id == assignmentId);
+        const essays = assignmentEssays[assignmentId] || [];
+
+        // Update assignment details
+        titleElement.innerText = selectedAssignment.title;
+        focusElement.innerText = selectedAssignment.focus || "N/A";
+
+        // Populate the essay table
+        tableBody.innerHTML = "";
+        essays.forEach(essay => {
+            const row = document.createElement("tr");
+            const essayCell = document.createElement("td");
+            const feedbackCell = document.createElement("td");
+
+            essayCell.innerText = essay.content;
+            feedbackCell.innerText = essay.feedback;
+
+            row.appendChild(essayCell);
+            row.appendChild(feedbackCell);
+            tableBody.appendChild(row);
+        });
+
+        detailsContainer.style.display = "block";
+    }
+
+    function analyzeTrends() {
+        const assignmentSelect = document.getElementById("assignment-select");
+        const assignmentId = assignmentSelect.value;
+
+        if (!assignmentId) {
+            alert("Please select an assignment first.");
+            return;
+        }
+
+        fetch(`/analyze_trends`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ assignment_id: assignmentId }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Trend analysis complete! Check console for details.");
+                console.log(data.analysis);
+            } else {
+                alert("Trend analysis failed.");
+            }
+        })
+        .catch(error => {
+            console.error("Error analyzing trends:", error);
+        });
+    }
+</script>
+{% endblock %}
