@@ -6,17 +6,18 @@ def drop_db_tables():
     db_connection = db.get_connection()
     db_cursor = db_connection.cursor()
 
-    drop_table_query = """
-    DROP TABLE IF EXISTS essays;
-    DROP TABLE IF EXISTS assignments;
-    DROP TABLE IF EXISTS users;
-    """
+    drop_essays_table_query = "DROP TABLE IF EXISTS essays;"
+    drop_assignments_table_query = "DROP TABLE IF EXISTS assignments;"
+    drop_users_table_query = "DROP TABLE IF EXISTS users;"
 
-    db_cursor.execute(drop_table_query)
+    db_cursor.execute(drop_essays_table_query)
+    db_cursor.execute(drop_assignments_table_query)
+    db_cursor.execute(drop_users_table_query)
     db_connection.commit()
 
     db_cursor.close()
     db_connection.close()
+
 
 def init_db():
     # drop_db_tables()

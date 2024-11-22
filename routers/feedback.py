@@ -18,7 +18,7 @@ async def feedback_form(request: Request, current_user: dict = Depends(auth.get_
     assignments = db.get_assignments_by_teacher(teacher_id, db_connection)
     return templates.TemplateResponse(
         "feedback.html",
-        {"request": request, "assignments": assignments, "feedback": None}
+        {"request": request, "assignments": assignments, "feedback": None, "user": current_user}
     )
 
 
@@ -63,5 +63,5 @@ async def generate_feedback(
     assignments = db.get_assignments_by_teacher(teacher_id, db_connection)
     return templates.TemplateResponse(
         "feedback.html",
-        {"request": request, "assignments": assignments, "feedback": feedback_result}
+        {"request": request, "assignments": assignments, "feedback": feedback_result, "user": current_user}
     )
