@@ -53,11 +53,6 @@ a:hover {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.btn:hover {
-  background-color: #9a6dd0;
-  color: #ffffff;
-}
-
 /* Content Styles */
 .feedback-container, .home-container, .assignments-container, .trend-analysis-container {
   max-width: 800px;
@@ -138,13 +133,13 @@ label {
   margin-top: 20px;
 }
 
-.actions .btn {
+.btn {
   background: #bb86fc;
   color: #000;
   border: 1px solid #444;
 }
 
-.actions .btn:hover {
+.btn:hover {
   background-color: #9a6dd0;
   color: #ffffff;
 }
