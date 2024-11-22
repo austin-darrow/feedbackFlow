@@ -41,9 +41,7 @@ async def login(request: Request):
     return templates.TemplateResponse('login.html', {"request": request})
 
 @router.post("/login")
-async def login(request: Request, email: str = Form(...), password: str = Form(...), current_user: dict = Depends(auth.get_current_user)):
-    if current_user:
-        return RedirectResponse(url="/", status_code=302)
+async def login(request: Request, email: str = Form(...), password: str = Form(...)):
     user = auth.authenticate_user(email, password)
     if user:
         access_token = auth.create_access_token(data={"sub": user["email"]})
