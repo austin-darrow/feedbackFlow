@@ -2,9 +2,8 @@ from fastapi import APIRouter, Form, HTTPException, Request, status, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
-from backend.routers import auth
+from routers import auth
 from services import db
-from routers.auth import authenticate_user, get_current_user
 from passlib.context import CryptContext
 
 router = APIRouter(tags=["users"])
@@ -35,7 +34,7 @@ def hash_password(password: str):
 
 
 @router.get("/users/me")
-async def read_users_me(current_user: dict = Depends(get_current_user)):
+async def read_users_me(current_user: dict = Depends(auth.get_current_user)):
     return current_user
 
 
