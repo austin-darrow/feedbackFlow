@@ -1,7 +1,7 @@
 /* General body styles */
 body {
     margin: 0;
-    padding: 0;
+    padding: 10px;
     font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
     font-size: 16px;
     line-height: 1.6;
@@ -31,7 +31,8 @@ body {
   .navbar {
     margin-bottom: 30px;
     background-color: #212121; /* Dark navbar */
-    border-bottom: 1px solid #333; /* Subtle border */
+    border: 1px solid black; /* Subtle border */
+    border-radius: 8px;
   }
 
   .navbar-brand, .navbar-nav .nav-link {
