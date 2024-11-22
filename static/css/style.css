@@ -248,7 +248,6 @@ body {
   /* Navbar Styles */
 .navbar {
     background-color: #212121;
-    border-bottom: 1px solid #333;
     padding: 10px 20px;
     position: relative;
     z-index: 1000;
