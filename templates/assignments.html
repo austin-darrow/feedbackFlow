@@ -38,78 +38,97 @@
 </div>
 
 <script>
-    // Safely load assignments and essays from Jinja2 context
-    const assignmentList = JSON.parse(`{{ assignments|tojson|safe }}`);
-    const assignmentEssays = JSON.parse(`{{ assignment_essays|tojson|safe }}`);
+    document.addEventListener("DOMContentLoaded", () => {
+        // Safely load assignments and essays from Jinja2 context
+        const assignmentList = JSON.parse(`{{ assignments|tojson|safe }}`);
+        const assignmentEssays = JSON.parse(`{{ assignment_essays|tojson|safe }}`);
 
-    function updateAssignmentTable() {
-        const assignmentSelect = document.getElementById("assignment-select");
-        const assignmentId = assignmentSelect.value;
+        console.log("Assignments:", assignmentList);
+        console.log("Assignment Essays:", assignmentEssays);
 
-        const detailsContainer = document.getElementById("assignment-details");
-        const titleElement = document.getElementById("assignment-title");
-        const focusElement = document.getElementById("assignment-focus");
-        const tableBody = document.getElementById("essay-table-body");
+        // Function to update the assignment table
+        function updateAssignmentTable() {
+            console.log("Dropdown changed");
 
-        if (!assignmentId) {
-            detailsContainer.style.display = "none";
-            return;
-        }
+            const assignmentSelect = document.getElementById("assignment-select");
+            const assignmentId = assignmentSelect.value;
 
-        const selectedAssignment = assignmentList.find(a => a.id == assignmentId);
-        const essays = assignmentEssays[assignmentId] || [];
+            const detailsContainer = document.getElementById("assignment-details");
+            const titleElement = document.getElementById("assignment-title");
+            const focusElement = document.getElementById("assignment-focus");
+            const tableBody = document.getElementById("essay-table-body");
 
-        // Update assignment details
-        titleElement.innerText = selectedAssignment.title;
-        focusElement.innerText = selectedAssignment.focus || "N/A";
-
-        // Populate the essay table
-        tableBody.innerHTML = "";
-        essays.forEach(essay => {
-            const row = document.createElement("tr");
-            const essayCell = document.createElement("td");
-            const feedbackCell = document.createElement("td");
-
-            essayCell.innerText = essay.content;
-            feedbackCell.innerText = essay.feedback;
-
-            row.appendChild(essayCell);
-            row.appendChild(feedbackCell);
-            tableBody.appendChild(row);
-        });
-
-        detailsContainer.style.display = "block";
-    }
-
-    function analyzeTrends() {
-        const assignmentSelect = document.getElementById("assignment-select");
-        const assignmentId = assignmentSelect.value;
-
-        if (!assignmentId) {
-            alert("Please select an assignment first.");
-            return;
-        }
-
-        fetch(`/analyze_trends`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ assignment_id: assignmentId }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert("Trend analysis complete! Check console for details.");
-                console.log(data.analysis);
-            } else {
-                alert("Trend analysis failed.");
+            if (!assignmentId) {
+                console.log("No assignment selected, hiding details container");
+                detailsContainer.style.display = "none";
+                return;
             }
-        })
-        .catch(error => {
-            console.error("Error analyzing trends:", error);
-        });
-    }
+
+            const selectedAssignment = assignmentList.find(a => a.id == parseInt(assignmentId));
+            console.log("Selected assignment:", selectedAssignment);
+
+            const essays = assignmentEssays[assignmentId] || [];
+            console.log("Essays for selected assignment:", essays);
+
+            // Update assignment details
+            titleElement.innerText = selectedAssignment.title;
+            focusElement.innerText = selectedAssignment.focus || "N/A";
+
+            // Populate the essay table
+            tableBody.innerHTML = "";
+            essays.forEach(essay => {
+                const row = document.createElement("tr");
+                const essayCell = document.createElement("td");
+                const feedbackCell = document.createElement("td");
+
+                essayCell.innerText = essay.content;
+                feedbackCell.innerText = essay.feedback;
+
+                row.appendChild(essayCell);
+                row.appendChild(feedbackCell);
+                tableBody.appendChild(row);
+            });
+
+            detailsContainer.style.display = "block";
+        }
+
+        // Function to analyze trends
+        function analyzeTrends() {
+            const assignmentSelect = document.getElementById("assignment-select");
+            const assignmentId = assignmentSelect.value;
+
+            if (!assignmentId) {
+                alert("Please select an assignment first.");
+                return;
+            }
+
+            fetch(`/analyze_trends`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ assignment_id: assignmentId }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Trend analysis complete! Check console for details.");
+                        console.log(data.analysis);
+                    } else {
+                        alert("Trend analysis failed.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error analyzing trends:", error);
+                });
+        }
+
+        // Attach event listener to the dropdown
+        document.getElementById("assignment-select").addEventListener("change", updateAssignmentTable);
+
+        // Attach event listener to the analyze trends button
+        document.getElementById("analyze-trends-btn").addEventListener("click", analyzeTrends);
+    });
 </script>
 
 {% endblock %}
