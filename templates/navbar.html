@@ -1,12 +1,14 @@
 <!-- Example Navbar -->
 <div class="navbar">
-    <a href="/">Home</a>
+    <a href="/" class="btn">Home</a>
+    <div>
     {% if user %}
-        <a href="/feedback">Generate Feedback</a>
-        <a href="/assignments">Analyze Trends</a>
-        <a href="/logout">Logout</a>
+        <a href="/feedback" class="btn">Generate Feedback</a>
+        <a href="/assignments" class="btn">Analyze Trends</a>
+        <a href="/logout" class="btn">Logout</a>
     {% else %}
-        <a href="/login">Login</a>
-        <a href="/register">Register</a>
+        <a href="/login" class="btn">Login</a>
+        <a href="/register" class="btn">Register</a>
     {% endif %}
+    </div>
 </div>
