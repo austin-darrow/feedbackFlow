@@ -32,12 +32,12 @@ a:hover {
 }
 
 .navbar a {
-  color: #e0e0e0;
+  color: #000;
   margin: 0 10px;
 }
 
 .navbar a:hover {
-  color: #bb86fc;
+  color: #ffffff;
 }
 
 /* Button Styles */
