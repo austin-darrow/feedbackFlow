@@ -434,3 +434,50 @@ body {
 hr.solid {
   border-top: 2px solid #bbb;
 }
+
+
+/* Home page container */
+.home-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Section styles */
+.section {
+  margin-bottom: 40px;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.section h2 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.section p {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.section ul, .section ol {
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.section ul li, .section ol li {
+  margin-bottom: 5px;
+}
+
+.section a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.section a:hover {
+  text-decoration: underline;
+}

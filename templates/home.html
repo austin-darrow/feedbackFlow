@@ -1,7 +1,54 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div>
-    hello world home
+<div class="home-container">
+    <h1>Welcome to FeedbackFlow</h1>
+    <p>Your go-to app for providing meaningful and structured feedback on student essays.</p>
+
+    <!-- About This App Section -->
+    <div class="section about">
+        <h2>About This App</h2>
+        <p>
+            FeedbackFlow is designed to streamline the process of reviewing and providing feedback on student writing.
+            Key features include:
+        </p>
+        <ul>
+            <li>Automated, AI-powered feedback on student essays</li>
+            <li>Organized assignment management for teachers</li>
+            <li>Secure storage of essays and feedback for future reference</li>
+            <li>Customizable focus areas for targeted feedback</li>
+        </ul>
+    </div>
+
+    <!-- Data Policy Section -->
+    <div class="section data-policy">
+        <h2>Data Policy</h2>
+        <p>
+            FeedbackFlow collects and stores the following data:
+        </p>
+        <ul>
+            <li>Submitted essays and associated feedback</li>
+            <li>Assignment details created by teachers</li>
+            <li>Basic user information such as email</li>
+        </ul>
+        <p>
+            This data is solely used to enable the functionality of the app. It is securely stored and not shared with
+            any third parties or used beyond the app's intended purpose.
+        </p>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="section how-it-works">
+        <h2>How It Works</h2>
+        <p>
+            Using FeedbackFlow is simple:
+        </p>
+        <ol>
+            <li>Create or select an assignment from the dashboard.</li>
+            <li>Submit a student's essay to generate AI-powered feedback.</li>
+            <li>Review and share the feedback with your students.</li>
+            <li>Access all past essays and feedback in the assignment history.</li>
+        </ol>
+    </div>
 </div>
 {% endblock %}
