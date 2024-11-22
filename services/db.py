@@ -37,16 +37,19 @@ def get_user(email: str, db_connection):
     db_cursor.close()
     return result  # Already a dictionary because of RealDictCursor
 
-def insert_essay(content, feedback, teacher_id, assignment_id, db_connection):
+def insert_essay(content, feedback, teacher_id, assignment_id, db_connection) -> int:
     """Insert an essay and its generated feedback into the database."""
     query = """
     INSERT INTO essays (content, feedback, teacher_id, assignment_id)
-    VALUES (%s, %s, %s, %s);
+    VALUES (%s, %s, %s, %s)
+    RETURNING id;
     """
     db_cursor = get_db_cursor(db_connection)
     db_cursor.execute(query, (content, feedback, teacher_id, assignment_id))
+    essay_id = db_cursor.fetchone()["id"]
     db_connection.commit()
     db_cursor.close()
+    return essay_id
 
 def get_essay(teacher_id: int, assignment_id: int, db_connection):
     """Retrieve essays by teacher and assignment."""
@@ -62,7 +65,7 @@ def get_essay(teacher_id: int, assignment_id: int, db_connection):
     return results  # Returns a list of dictionaries with "content" and "feedback"
 
 
-def create_assignment(title, teacher_id, db_connection, focus=None):
+def create_assignment(title, teacher_id, db_connection, focus=None) -> int:
     """Create a new assignment."""
     query = """
     INSERT INTO assignments (title, teacher_id, focus)
