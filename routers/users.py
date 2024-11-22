@@ -54,3 +54,10 @@ async def login(request: Request, email: str = Form(...), password: str = Form(.
         return response
     else:
         return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid credentials"})
+
+
+@router.get("/logout")
+async def logout(request: Request):
+    response = RedirectResponse(url="/login", status_code=302)
+    response.delete_cookie("access_token")
+    return response
