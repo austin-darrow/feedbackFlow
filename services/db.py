@@ -40,15 +40,13 @@ def get_user(email: str, db_connection):
     }
     return user
 
-def insert_essay(essay: str, feedback: str, teacher_id: int, assignment_id: int, db_connection):
-    db_cursor = get_db_cursor(db_connection)
-    insert_query = """
-    INSERT INTO essays (teacher_id, assignment_id, content, feedback)
-    VALUES (%s, %s, %s, %s);
+def insert_essay(writing_sample, feedback, teacher_id, assignment_id, db_connection):
+    query = """
+    INSERT INTO essays (writing_sample, feedback, teacher_id, assignment_id)
+    VALUES (?, ?, ?, ?)
     """
-    db_cursor.execute(insert_query, (teacher_id, assignment_id, essay, feedback))
+    db_connection.execute(query, (writing_sample, feedback, teacher_id, assignment_id))
     db_connection.commit()
-    db_cursor.close()
 
 def get_essay(teacher_id: int, assignment_id: int, db_connection):
     db_cursor = get_db_cursor(db_connection)
@@ -63,18 +61,11 @@ def get_essay(teacher_id: int, assignment_id: int, db_connection):
     essays = [row['content'] for row in results]
     return essays
 
-def create_assignment(title: str, teacher_id: int, db_connection, focus: str = None):
-    db_cursor = get_db_cursor(db_connection)
-    insert_query = """
-    INSERT INTO assignments (teacher_id, title, focus)
-    VALUES (%s, %s, %s)
-    RETURNING id;
-    """
-    db_cursor.execute(insert_query, (teacher_id, title, focus))
-    assignment_id = db_cursor.fetchone()['id']
+def create_assignment(title, teacher_id, db_connection, focus=None):
+    query = "INSERT INTO assignments (title, teacher_id, focus) VALUES (?, ?, ?)"
+    cursor = db_connection.execute(query, (title, teacher_id, focus))
     db_connection.commit()
-    db_cursor.close()
-    return assignment_id
+    return cursor.lastrowid
 
 def get_assignment_by_id(assignment_id: int, db_connection):
     db_cursor = get_db_cursor(db_connection)
@@ -97,15 +88,6 @@ def get_assignment_by_id(assignment_id: int, db_connection):
     return assignment
 
 
-def get_assignments(teacher_id: int, db_connection):
-    db_cursor = get_db_cursor(db_connection)
-    select_query = """
-    SELECT id, title, focus
-    FROM assignments
-    WHERE teacher_id = %s;
-    """
-    db_cursor.execute(select_query, (teacher_id,))
-    results = db_cursor.fetchall()
-    db_cursor.close()
-    assignments = [{"id": row['id'], "title": row['title'], "focus": row['focus']} for row in results]
-    return assignments
+def get_assignments_by_teacher(teacher_id, db_connection):
+    query = "SELECT id, title, focus FROM assignments WHERE teacher_id = ?"
+    return db_connection.execute(query, (teacher_id,)).fetchall()

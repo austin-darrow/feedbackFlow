@@ -1,7 +1,44 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div>
-    hello world feedback
+<div class="feedback-container">
+    <h2>Generate Feedback</h2>
+    <form id="feedbackForm" action="/feedback" method="post">
+        <div class="form-group">
+            <label for="assignment">Select Assignment:</label>
+            <select id="assignment" name="assignment_id" class="form-control">
+                <option value="">-- Create New Assignment --</option>
+                {% for assignment in assignments %}
+                <option value="{{ assignment.id }}">{{ assignment.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group mt-20">
+            <label for="assignment_title">New Assignment Title (if creating new):</label>
+            <input type="text" id="assignment_title" name="assignment_title" class="form-control">
+        </div>
+        <div class="form-group mt-20">
+            <label for="focus">Focus Skills:</label>
+            <input type="text" id="focus" name="focus" class="form-control">
+        </div>
+        <div class="form-group mt-20">
+            <label for="writing_sample">Student Essay:</label>
+            <textarea id="writing_sample" name="writing_sample" class="form-control" rows="10" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-light-blue mt-20">Generate Feedback</button>
+    </form>
+
+    {% if feedback %}
+    <div class="feedback-result mt-40">
+        <h3>Generated Feedback</h3>
+        <p><strong>Assignment:</strong> {{ feedback.assignment_title }}</p>
+        <p><strong>Focus Skills:</strong> {{ feedback.focus }}</p>
+        <p><strong>Student Essay:</strong></p>
+        <pre class="feedback-essay">{{ feedback.writing_sample }}</pre>
+        <p><strong>Feedback:</strong></p>
+        <pre class="feedback-text">{{ feedback.generated_feedback }}</pre>
+        <a href="/feedback" class="btn btn-light-blue mt-20">Submit Another Essay</a>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

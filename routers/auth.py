@@ -1,4 +1,5 @@
 from fastapi import Depends, HTTPException, APIRouter, Request, status
+from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt, JWTError
 import os
@@ -54,16 +55,23 @@ class TokenData(BaseModel):
 def get_current_user(request: Request):
     token = request.cookies.get("access_token")
     if not token:
-        return None
+        # Redirect to login if no token is found
+        return RedirectResponse(url="/login", status_code=307)
+
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
         if email is None:
-            return None
+            raise credentials_exception
         db_connection = db.get_connection()
         user = db.get_user(email, db_connection)
         if user is None:
-            return None
+            raise credentials_exception
         return user
     except JWTError:
-        return None
+        raise credentials_exception
