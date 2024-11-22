@@ -54,7 +54,7 @@ a:hover {
 }
 
 /* Content Styles */
-.feedback-container, .home-container, .assignments-container, .trend-analysis-container {
+.feedback-container, .home-container, .assignments-container, .trend-analysis-container, .login-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
