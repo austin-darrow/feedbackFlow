@@ -68,7 +68,7 @@ def get_essay_by_id(essay_id: int, db_connection):
     """Retrieve an essay by its ID."""
     db_cursor = get_db_cursor(db_connection)
     select_query = """
-    SELECT content, feedback
+    SELECT id, teacher_id, assignment_id, content, feedback, created
     FROM essays
     WHERE id = %s;
     """

@@ -31,9 +31,6 @@ async def generate_feedback(
     focus: Optional[str] = Form(None),
     current_user: dict = Depends(auth.get_current_user),
 ):
-    if not current_user:
-        return RedirectResponse(url="/login", status_code=307)
-
     teacher_id = current_user["id"]
     db_connection = db.get_connection()
 
@@ -66,9 +63,6 @@ async def show_feedback(
     essay_id: int,
     current_user: dict = Depends(auth.get_current_user),
 ):
-    if not current_user:
-        return RedirectResponse(url="/login", status_code=307)
-
     teacher_id = current_user["id"]
     db_connection = db.get_connection()
 
@@ -99,8 +93,5 @@ async def assignment_feedback(
     request: Request,
     current_user: dict = Depends(auth.get_current_user),
 ):
-    if not current_user:
-        return RedirectResponse(url="/login", status_code=307)
-
     teacher_id = current_user["id"]
     db_connection = db.get_connection()
