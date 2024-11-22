@@ -7,14 +7,17 @@
                 <li class="nav-item">
                     <a class="nav-link btn btn-light-blue" href="/feedback">Generate Feedback</a>
                 </li>
-                {% endif %}
                 <li class="nav-item">
-                    {% if user %}
-                    <a class="nav-link btn btn-light-blue" href="/logout">Logout</a>
-                    {% else %}
-                    <a class="nav-link btn btn-light-blue" href="/login">Login</a>
-                    {% endif %}
+                    <a class="nav-link btn btn-light-blue" href="/assignments">Analyze Trends</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-light-blue" href="/logout">Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link btn btn-light-blue" href="/login">Login</a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>

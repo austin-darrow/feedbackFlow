@@ -38,8 +38,9 @@
 </div>
 
 <script>
-    const assignmentList = JSON.parse('{{ assignments|tojson|escapejs }}');
-    const assignmentEssays = JSON.parse('{{ assignment_essays|tojson|escapejs }}');
+    // Safely load assignments and essays from Jinja2 context
+    const assignmentList = JSON.parse(`{{ assignments|tojson|safe }}`);
+    const assignmentEssays = JSON.parse(`{{ assignment_essays|tojson|safe }}`);
 
     function updateAssignmentTable() {
         const assignmentSelect = document.getElementById("assignment-select");
@@ -110,4 +111,5 @@
         });
     }
 </script>
+
 {% endblock %}
