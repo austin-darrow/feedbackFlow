@@ -105,7 +105,7 @@ async def view_assignments(request: Request, current_user: dict = Depends(auth.g
 
     # Fetch essays for each assignment
     for assignment in assignments:
-        essays = db.get_essay(teacher_id, assignment["id"], db_connection)
+        essays = db.get_essays(teacher_id, assignment["id"], db_connection)
         assignment["essays"] = essays
 
     return templates.TemplateResponse(
@@ -113,6 +113,7 @@ async def view_assignments(request: Request, current_user: dict = Depends(auth.g
         {
             "request": request,
             "assignments": assignments,
+            "user": current_user,
         },
     )
 
@@ -131,7 +132,7 @@ async def analyze_trends(
     db_connection = db.get_connection()
 
     # Fetch essays for the given assignment
-    essays = db.get_essay(teacher_id, assignment_id, db_connection)
+    essays = db.get_essays(teacher_id, assignment_id, db_connection)
 
     # Call the `analyze_trends` function from `services.feedback`
     trend_analysis = feedback.analyze_trends(essays)
@@ -144,5 +145,6 @@ async def analyze_trends(
             "request": request,
             "trend_analysis": trend_analysis,
             "assignment": assignment,
+            "user": current_user,
         },
     )
