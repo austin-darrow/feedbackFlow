@@ -1,420 +1,47 @@
-/* General body styles */
+/* General Styles */
 body {
-    margin: 0;
-    padding: 10px;
-    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    background-color: #121212; /* Dark background */
-    color: #e0e0e0; /* Light text color for contrast */
-  }
-
-  /* .app container styles */
-  .app-container {
-    max-width: 90vw;
-    min-height: 90vh;
-    margin: 0 auto;
-    padding: 40px;
-    background-color: #1e1e1e; /* Slightly lighter than body for contrast */
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Deeper shadow for depth */
-  }
-
-  /* Headers styling */
-  h1, h2, h3 {
-    margin-bottom: 20px;
-    color: #ffffff; /* Pure white for headers */
-    font-weight: 600;
-  }
-
-  /* Navbar styles */
-  .navbar {
-    margin-bottom: 30px;
-    background-color: #212121; /* Dark navbar */
-    border: 1px solid black; /* Subtle border */
-    border-radius: 8px;
-  }
-
-  .navbar-brand, .navbar-nav .nav-link {
-    color: #e0e0e0 !important;
-    font-weight: 500;
-  }
-
-  .navbar-brand:hover, .navbar-nav .nav-link:hover {
-    color: #bb86fc !important; /* Accent color on hover */
-  }
-
-  /* Links */
-  a {
-    color: #bb86fc; /* Accent color */
-    text-decoration: none;
-  }
-
-  a:hover {
-    color: #ffffff;
-    text-decoration: underline;
-  }
-
-  /* Buttons */
-  .btn {
-    display: inline-block;
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 4px;
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: #121212; /* Dark background */
+  color: #e0e0e0; /* Light font color */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-  /* Light blue button style */
-  .btn-light-blue {
-      background-color: #add8e6; /* Light blue */
-      color: #000; /* Black text */
-      border: 1px solid #87ceeb; /* Sky blue border */
-  }
-
-  .btn-light-blue:hover {
-      background-color: #87ceeb; /* Darker blue on hover */
-      color: #fff; /* White text on hover */
-  }
-
-  /* Form inputs */
-  .form-control {
-    background-color: #2a2a2a;
-    color: #e0e0e0;
-    border: 1px solid #444;
-    border-radius: 4px;
-  }
-
-  .form-control:focus {
-    background-color: #2a2a2a;
-    color: #e0e0e0;
-    border-color: #bb86fc;
-    box-shadow: none;
-  }
-
-  /* Footer styles */
-  footer {
-    margin-top: 60px;
-    padding: 20px;
-    background-color: #1e1e1e;
-    text-align: center;
-    font-size: 14px;
-    color: #757575;
-  }
-
-  /* Scrollbar styling */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #1e1e1e;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #444444;
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555555;
-  }
-
-  /* Utility classes */
-  .text-center {
-    text-align: center;
-  }
-
-  .mt-20 {
-    margin-top: 20px;
-  }
-
-  .mb-20 {
-    margin-bottom: 20px;
-  }
-
-  /* Card styles */
-  .card {
-    background-color: #2a2a2a;
-    border: none;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 30px;
-  }
-
-  .card-title {
-    font-size: 1.5rem;
-    color: #ffffff;
-    margin-bottom: 15px;
-  }
-
-  .card-text {
-    color: #bdbdbd;
-  }
-
-  /* Table styles */
-  .table {
-    color: #e0e0e0;
-  }
-
-  .table thead th {
-    background-color: #2a2a2a;
-    border-bottom: 2px solid #444;
-  }
-
-  .table tbody tr {
-    border-bottom: 1px solid #333;
-  }
-
-  .table tbody tr:hover {
-    background-color: #2e2e2e;
-  }
-
-  /* Form styles */
-  .form-label {
-    color: #e0e0e0;
-  }
-
-  .form-check-input:checked {
-    background-color: #bb86fc;
-    border-color: #bb86fc;
-  }
-
-  .form-check-label {
-    color: #bdbdbd;
-  }
-
-  /* Modal styles */
-  .modal-content {
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-    border: none;
-  }
-
-  .modal-header, .modal-footer {
-    border: none;
-  }
-
-  .modal-title {
-    color: #ffffff;
-  }
-
-  /* Tooltip and Popover */
-  .tooltip-inner {
-    background-color: #333;
-    color: #e0e0e0;
-  }
-
-  .bs-tooltip-top .arrow::before, .bs-tooltip-auto[x-placement^="top"] .arrow::before {
-    border-top-color: #333;
-  }
-
-  /* Progress bar */
-  .progress {
-    background-color: #2a2a2a;
-    border-radius: 4px;
-    height: 20px;
-  }
-
-  .progress-bar {
-    background-color: #bb86fc;
-  }
-
-  /* Breadcrumb */
-  .breadcrumb {
-    background-color: transparent;
-  }
-
-  .breadcrumb .breadcrumb-item a {
-    color: #bb86fc;
-  }
-
-  .breadcrumb .breadcrumb-item.active {
-    color: #e0e0e0;
-  }
-
-  /* Customize Bootstrap's default focus styles */
-  *:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #bb86fc;
-  }
-
-
-
-  /* Navbar Styles */
-.navbar {
-    background-color: #212121;
-    padding: 10px 20px;
-    position: relative;
-    z-index: 1000;
+a {
+  color: #bb86fc; /* Pinkish color for links */
+  text-decoration: none;
 }
 
-.navbar-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+a:hover {
+  color: #9a6dd0; /* Slightly darker pink on hover */
 }
 
-.navbar-brand {
-    font-size: 1.5rem;
-    color: #e0e0e0;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.navbar-toggle {
-    font-size: 1.5rem;
-    color: #e0e0e0;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: none; /* Hidden on desktop */
-}
-
-.navbar-menu {
-    display: flex;
-}
-
-.navbar-nav {
-    list-style: none;
-    display: flex;
-    gap: 1rem;
-    margin: 0;
-    padding: 0;
-}
-
-.nav-item {
-    margin-left: 20px;
-}
-
-.nav-link {
-    color: #e0e0e0;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.nav-link:hover {
-    color: #bb86fc;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .navbar-toggle {
-        display: block;
-    }
-    .navbar-menu {
-        display: none;
-        flex-direction: column;
-        background-color: #212121;
-        position: absolute;
-        top: 60px; /* Adjust based on navbar height */
-        right: 0;
-        width: 200px;
-        border: 1px solid #333;
-    }
-    .navbar-menu.active {
-        display: flex;
-    }
-    .nav-item {
-        margin: 10px 0;
-        text-align: right;
-        margin-right: 20px;
-    }
-}
-
-
-/* Login Form Styles */
-.login-container {
-    max-width: 400px;
-    margin: 0 auto;
-    background-color: #1e1e1e;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.login-container h2 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #ffffff;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: #e0e0e0;
-}
-
-.form-control {
-    width: 100%;
-    padding: 10px;
-    background-color: #2a2a2a;
-    border: 1px solid #444;
-    border-radius: 4px;
-    color: #e0e0e0;
-}
-
-.form-control:focus {
-    border-color: #bb86fc;
-    outline: none;
-}
-
-.btn {
-    width: 100%;
-    padding: 12px;
-    background-color: #bb86fc;
-    color: #000;
-    border: none;
-    border-radius: 4px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-    background-color: #9a6dd0;
-    color: #ffffff;
-}
-
-.feedback-container {
-  max-width: 85vw; /* Matches the parent container width */
-  margin: 0 auto; /* Centers the container */
+/* Container Styles */
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  background: #1e1e1e;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
 }
 
-/* Sections for assignment and essay feedback */
-.output-section, .essay-section {
-  margin-bottom: 20px;
+/* Navbar Styles */
+.navbar {
+  background-color: #1f1f1f;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
 }
 
-/* Text areas for essay content and feedback */
-.essay-content, .essay-feedback {
-  background: #1e1e1e;
-  padding: 15px;
-  border-radius: 4px;
-  white-space: pre-wrap; /* Wraps text to fit inside container */
-  word-wrap: break-word; /* Breaks long words to avoid overflow */
-  overflow-x: auto; /* Enables horizontal scrolling for long lines */
-  font-family: monospace; /* Fixed-width font for better text alignment */
-  font-size: 14px; /* Slightly smaller text size for essays */
+.navbar a {
+  color: #e0e0e0;
+  margin: 0 10px;
 }
 
-/* Button styling */
-.actions .btn {
+.navbar a:hover {
+  color: #bb86fc;
+}
+
+/* Button Styles */
+.btn {
   display: inline-block;
   padding: 10px 20px;
   font-size: 16px;
@@ -426,62 +53,47 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.actions .btn:hover {
+.btn:hover {
   background-color: #9a6dd0;
   color: #ffffff;
 }
 
-hr.solid {
-  border-top: 2px solid #bbb;
-}
-
-
-/* Home page container */
-.home-container {
+/* Content Styles */
+.feedback-container, .home-container, .assignments-container, .trend-analysis-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
 
-/* Section styles */
-.section {
-  padding: 20px;
-  color: snow;
-}
-
-.section h2 {
-  margin-bottom: 10px;
-  font-size: 1.5rem;
-  color: snow;
-}
-
-.section p {
-  font-size: 1rem;
-  line-height: 1.6;
-}
-
-.section ul, .section ol {
-  padding-left: 20px;
-  margin-bottom: 10px;
-}
-
-.section ul li, .section ol li {
-  margin-bottom: 5px;
-}
-
-.assignments-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.assignment-details {
-  background: #f9f9f9;
+.section, .output-section, .essay-section, .assignment-details, .analysis-results {
+  background: #1e1e1e;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
+.section h2, .output-section h4, .essay-section h4, .assignment-details h3, .assignment-details h4, .analysis-results h3 {
+  color: #e0e0e0;
+}
+
+.section p, .output-section p, .essay-section p, .assignment-details p, .analysis-results p {
+  color: #e0e0e0;
+}
+
+/* Essay Content and Feedback */
+.essay-content, .essay-feedback {
+  background: #1e1e1e;
+  padding: 15px;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto;
+  font-family: monospace;
+  font-size: 14px;
+  color: #e0e0e0;
+}
+
+/* Table Styles */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -489,12 +101,69 @@ hr.solid {
 }
 
 .table th, .table td {
-  border: 1px solid #ddd;
+  border: 1px solid #444;
   padding: 10px;
   text-align: left;
+  color: #e0e0e0;
 }
 
 .table th {
-  background-color: #f2f2f2;
+  background-color: #1e1e1e;
   font-weight: bold;
+}
+
+/* Form Styles */
+.form-control {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #1e1e1e;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #e0e0e0;
+}
+
+.form-control::placeholder {
+  color: #888;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #e0e0e0;
+}
+
+/* Actions */
+.actions {
+  margin-top: 20px;
+}
+
+.actions .btn {
+  background: #bb86fc;
+  color: #000;
+  border: 1px solid #444;
+}
+
+.actions .btn:hover {
+  background-color: #9a6dd0;
+  color: #ffffff;
+}
+
+/* Error Messages */
+.error {
+  color: #ff6b6b; /* Red color for errors */
+  margin-top: 10px;
+}
+
+/* Horizontal Rule */
+hr.solid {
+  border-top: 2px solid #bbb;
+}
+
+/* Footer (if applicable) */
+.footer {
+  background-color: #1f1f1f;
+  padding: 10px 20px;
+  text-align: center;
+  color: #e0e0e0;
 }

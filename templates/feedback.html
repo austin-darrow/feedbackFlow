@@ -25,7 +25,7 @@
             <label for="writing_sample">Student Essay:</label>
             <textarea id="writing_sample" name="writing_sample" class="form-control" rows="10" required></textarea>
         </div>
-        <button type="submit" class="btn btn-light-blue mt-20">Generate Feedback</button>
+        <button type="submit" class="btn mt-20">Generate Feedback</button>
     </form>
 
     {% if feedback %}
@@ -37,7 +37,7 @@
         <pre class="feedback-essay">{{ feedback.writing_sample }}</pre>
         <p><strong>Feedback:</strong></p>
         <pre class="feedback-text">{{ feedback.generated_feedback }}</pre>
-        <a href="/feedback" class="btn btn-light-blue mt-20">Submit Another Essay</a>
+        <a href="/feedback" class="btn mt-20">Submit Another Essay</a>
     </div>
     {% endif %}
 </div>
