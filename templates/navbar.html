@@ -1,4 +1,3 @@
-<!-- navbar.html -->
 <nav class="navbar">
     <div class="navbar-container">
         <a class="navbar-brand" href="/">FeedbackFlow</a>
@@ -9,14 +8,14 @@
             <ul class="navbar-nav">
                 {% if user %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/feedback">Generate Feedback</a>
+                    <a class="nav-link btn btn-light-blue" href="/feedback">Generate Feedback</a>
                 </li>
                 {% endif %}
                 <li class="nav-item">
                     {% if user %}
-                    <a class="nav-link" href="/logout">Logout</a>
+                    <a class="nav-link btn btn-light-blue" href="/logout">Logout</a>
                     {% else %}
-                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link btn btn-light-blue" href="/login">Login</a>
                     {% endif %}
                 </li>
             </ul>
