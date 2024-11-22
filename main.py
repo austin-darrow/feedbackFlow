@@ -44,8 +44,8 @@ templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/")
-def read_root(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
+def read_root(request: Request, current_user: dict = Depends(get_current_user)):
+    return templates.TemplateResponse("home.html", {"request": request, "user": current_user})
 
 
 if __name__ == "__main__":

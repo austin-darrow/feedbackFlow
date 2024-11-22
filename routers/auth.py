@@ -55,32 +55,16 @@ class TokenData(BaseModel):
 def get_current_user(request: Request):
     token = request.cookies.get("access_token")
     if not token:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not authenticated",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        return None  # Return None if no token is found
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
         if email is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid authentication token",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
+            return None  # Return None if the token is invalid
         db_connection = db.get_connection()
         user = db.get_user(email, db_connection)
         if user is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="User not found",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
+            return None  # Return None if the user does not exist in the database
         return user
     except JWTError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        return None  # Return None if the token is invalid
