@@ -43,11 +43,14 @@ async def login(request: Request):
     return templates.TemplateResponse('login.html', {"request": request})
 
 @router.post("/login")
-async def login(request: Request, email: str = Form(...), password: str = Form(...)):
-    valid_user_cookie = await auth.login(email, password)
-    if valid_user_cookie:
+async def login(request: Request, email: str = Form(...), password: str = Form(...), current_user: dict = Depends(auth.get_current_user)):
+    if current_user:
+        return RedirectResponse(url="/", status_code=302)
+    user = auth.authenticate_user(email, password)
+    if user:
+        access_token = auth.create_access_token(data={"sub": user["email"]})
         response = RedirectResponse(url="/feedback", status_code=302)
-        response.set_cookie(key="valid_user_cookie", value=valid_user_cookie)
+        response.set_cookie(key="access_token", value=access_token, httponly=True)
         return response
     else:
         return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid credentials"})

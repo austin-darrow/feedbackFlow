@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, Request
+from fastapi.responses import RedirectResponse
 import uvicorn
 import setup_db
 from contextlib import asynccontextmanager
@@ -10,6 +11,7 @@ from routers.assignments import router as assignments_router
 from routers.feedback import router as feedback_router
 from routers.users import router as users_router
 from routers.auth import router as auth_router
+from routers.auth import get_current_user
 
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -42,8 +44,11 @@ templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/")
-def read_root(request: Request):
-    return templates.TemplateResponse('home.html', {"request": request})
+def read_root(request: Request, current_user: dict = Depends(get_current_user)):
+    if current_user:
+        return templates.TemplateResponse('home.html', {"request": request, "user": current_user})
+    else:
+        return RedirectResponse(url="/login", status_code=302)
 
 
 if __name__ == "__main__":
