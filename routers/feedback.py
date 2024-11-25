@@ -131,11 +131,16 @@ async def analyze_trends(
     teacher_id = current_user["id"]
     db_connection = db.get_connection()
 
+    try:
+        assignment_focus = db.get_assignment_by_id(assignment_id, db_connection)["focus"]
+    except:
+        assignment_focus = None
+
     # Fetch essays for the given assignment
     essays = db.get_essays(teacher_id, assignment_id, db_connection)
 
     # Call the `analyze_trends` function from `services.feedback`
-    trend_analysis = feedback.analyze_trends(essays)
+    trend_analysis = feedback.analyze_trends(essays, assignment_focus)
 
     # Render a template to show the analysis results
     assignment = db.get_assignment_by_id(assignment_id, db_connection)

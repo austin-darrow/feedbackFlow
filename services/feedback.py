@@ -111,8 +111,38 @@ Grow: [constructive feedback]
     return response
 
 
-def analyze_trends(essays: list):
+def analyze_trends(essays: list, assignment_focus: str = None):
     '''
     Analyze trends in student essays.
     '''
-    return "This feature is coming soon!"
+    if not assignment_focus:
+        assignment_focus = '''higher-order concerns, such as:
+- Strength and complexity of the argument
+- Clarity and organization of ideas
+- Factual accuracy
+- Use of evidence and examples'''
+
+    system_prompt = f'''
+    You are a grade school ELA teacher. You have been given a set of student essays to review.
+    The focus of the assignment was on {assignment_focus}.
+    Analyze the essays and identify common strengths and weaknesses.
+    Provide a summary of the trends you observed in the student essays.
+    Format your response as a bulleted list of 3-5 key points.
+    '''
+    if os.environ.get("MODEL") == "nemotron":
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": essays}
+        ]
+        response = query_openai_api(messages)
+
+    elif os.environ.get("MODEL") == "llama":
+        messages = [
+            SystemMessage(content=system_prompt),
+            UserMessage(content=essays)
+        ]
+        response = query_azure_api(messages)
+    print("RESPONSE:\n\n")
+    print(response)
+
+    return response
