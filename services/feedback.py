@@ -132,14 +132,12 @@ def analyze_trends(essays: list, assignment_focus: str = None):
     Submission #[number]
     Essay: [essay content]
     Feedback: [LLM-generated feedback]
-    Provide a summary of the trends you observed in the student essays and feedback, paying special attention to strengths and weaknesses related to the assignment focus.
+    Provide a list of 1-2 strengths and 1-2 weaknesses you observed in the student essays and feedback, paying special attention to strengths and weaknesses related to the assignment focus.
     Format your response using this structure:
     STRENGTHS:
     [bulleted list of strengths with * at the beginning of each line]
     WEAKNESSES:
     [bulleted list of weaknesses with * at the beginning of each line]
-    ADDITIONAL COMMENTS:
-    [bulleted list of additional comments with * at the beginning of each line]
     '''
 
     user_essays = ""
@@ -165,11 +163,10 @@ def analyze_trends(essays: list, assignment_focus: str = None):
         ]
         response = query_azure_api(messages)
     # Format the response
-    final_response = ''
     strengths = response.split('STRENGTHS:')[1].split('WEAKNESSES:')[0].strip()
     weaknesses = response.split('WEAKNESSES:')[1].split('ADDITIONAL COMMENTS:')[0].strip()
-    additional_comments = response.split('ADDITIONAL COMMENTS:')[1].strip()
+    strengths = strengths.replace('**', '*')
+    weaknesses = weaknesses.replace('**', '*')
     strengths = strengths.split('*')
     weaknesses = weaknesses.split('*')
-    additional_comments = additional_comments.split('*')
-    return strengths, weaknesses, additional_comments
+    return strengths, weaknesses

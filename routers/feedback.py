@@ -140,7 +140,7 @@ async def analyze_trends(
     essays = db.get_essays(teacher_id, assignment_id, db_connection)
 
     # Call the `analyze_trends` function from `services.feedback`
-    strengths, weaknesses, additional_comments = feedback.analyze_trends(essays, assignment_focus)
+    strengths, weaknesses = feedback.analyze_trends(essays, assignment_focus)
 
     # Render a template to show the analysis results
     assignment = db.get_assignment_by_id(assignment_id, db_connection)
@@ -150,7 +150,6 @@ async def analyze_trends(
             "request": request,
             "strengths": strengths,
             "weaknesses": weaknesses,
-            "additional_comments": additional_comments,
             "assignment": assignment,
             "user": current_user,
         },
