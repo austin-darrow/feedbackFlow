@@ -11,52 +11,23 @@
         <p>Strengths:</p>
         <ul>
             {% for strength in strengths %}
+            {% if strength != "" %}
             <li>{{ strength }}</li>
+            {% endif %}
             {% endfor %}
         </ul>
         <p>Weaknesses:</p>
         <ul>
             {% for weakness in weaknesses %}
+            {% if weakness != "" %}
             <li>{{ weakness }}</li>
+            {% endif %}
             {% endfor %}
         </ul>
     </div>
 
     <div class="actions mt-20">
         <a href="/assignments" class="btn">Back to Assignments</a>
-        <button id="analyze-button" class="btn btn-primary mt-10">Analyze Trends</button>
-        <div id="loading-message" class="loading-message" style="display: none;">
-            <p>Loading... Please wait.</p>
-        </div>
     </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const analyzeButton = document.getElementById('analyze-button');
-        const loadingMessage = document.getElementById('loading-message');
-
-        analyzeButton.addEventListener('click', function() {
-            // Display the loading message
-            loadingMessage.style.display = 'block';
-
-            // Optionally, disable the button to prevent multiple clicks
-            analyzeButton.disabled = true;
-
-            // Simulate the analysis action (e.g., form submission or API call)
-            setTimeout(function() {
-                // Remove the loading message after a delay for demonstration purposes
-                // Replace this with the actual completion event for your analysis
-                loadingMessage.style.display = 'none';
-                analyzeButton.disabled = false;
-            }, 3000); // Example delay of 3 seconds
-        });
-    });
-</script>
-
-<style>
-
-</style>
 {% endblock %}

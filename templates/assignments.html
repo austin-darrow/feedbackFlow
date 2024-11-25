@@ -44,9 +44,12 @@
         {% endif %}
 
         <div class="actions mt-20">
-            <form action="/analyze_trends" method="post">
+            <form action="/analyze_trends" method="post" id="analyze-trends-form-{{ assignment.id }}">
                 <input type="hidden" name="assignment_id" value="{{ assignment.id }}">
-                <button type="submit" class="btn">Analyze Trends</button>
+                <button type="submit" class="btn" id="analyze-button-{{ assignment.id }}">Analyze Trends</button>
+                <div id="loading-indicator-{{ assignment.id }}" class="loading-indicator" style="display: none;">
+                    <p>Loading... Please wait.</p>
+                </div>
             </form>
         </div>
     </div>
@@ -79,6 +82,19 @@
                     selectedDetails.style.display = 'block';
                 }
             }
+        });
+
+        const forms = document.querySelectorAll("form[id^='analyze-trends-form']");
+
+        forms.forEach((form) => {
+            form.addEventListener("submit", (event) => {
+                const button = form.querySelector("button[type='submit']");
+                const loadingIndicator = form.querySelector(".loading-indicator");
+
+                // Disable the button and show the loading message
+                button.disabled = true;
+                loadingIndicator.style.display = "block";
+            });
         });
     });
 </script>
