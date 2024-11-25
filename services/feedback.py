@@ -133,7 +133,13 @@ def analyze_trends(essays: list, assignment_focus: str = None):
     Essay: [essay content]
     Feedback: [LLM-generated feedback]
     Provide a summary of the trends you observed in the student essays and feedback, paying special attention to strengths and weaknesses related to the assignment focus.
-    Format your response as a bulleted list of 3-5 key points.
+    Format your response using this structure:
+    STRENGTHS:
+    [bulleted list of strengths with * at the beginning of each line]
+    WEAKNESSES:
+    [bulleted list of weaknesses with * at the beginning of each line]
+    ADDITIONAL COMMENTS:
+    [bulleted list of additional comments with * at the beginning of each line]
     '''
 
     user_essays = ""
@@ -158,7 +164,22 @@ def analyze_trends(essays: list, assignment_focus: str = None):
             UserMessage(content=user_essays)
         ]
         response = query_azure_api(messages)
-    print("RESPONSE:\n\n")
-    print(response)
+    # Format the response
+    final_response = ''
+    strengths = response.split('STRENGTHS:')[1].split('WEAKNESSES:')[0].strip()
+    weaknesses = response.split('WEAKNESSES:')[1].split('ADDITIONAL COMMENTS:')[0].strip()
+    additional_comments = response.split('ADDITIONAL COMMENTS:')[1].strip()
+    strengths = strengths.split('*')
+    weaknesses = weaknesses.split('*')
+    additional_comments = additional_comments.split('*')
+    final_response += 'STRENGTHS:\n'
+    for strength in strengths:
+        final_response += f'* {strength}\n'
+    final_response += '\nWEAKNESSES:\n'
+    for weakness in weaknesses:
+        final_response += f'* {weakness}\n'
+    final_response += '\nADDITIONAL COMMENTS:\n'
+    for comment in additional_comments:
+        final_response += f'* {comment}\n'
 
-    return response
+    return final_response
