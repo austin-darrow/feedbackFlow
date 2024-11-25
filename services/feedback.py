@@ -132,7 +132,7 @@ def analyze_trends(essays: list, assignment_focus: str = None):
     Submission #[number]
     Essay: [essay content]
     Feedback: [LLM-generated feedback]
-    Provide a summary of the trends you observed in the student essays and feedback.
+    Provide a summary of the trends you observed in the student essays and feedback, paying special attention to strengths and weaknesses related to the assignment focus.
     Format your response as a bulleted list of 3-5 key points.
     '''
 
