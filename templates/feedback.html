@@ -13,13 +13,15 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="form-group mt-20">
-            <label for="assignment_title">New Assignment Title (if creating new):</label>
-            <input type="text" id="assignment_title" name="assignment_title" class="form-control">
-        </div>
-        <div class="form-group mt-20">
-            <label for="focus">Focus Skills:</label>
-            <input type="text" id="focus" name="focus" class="form-control">
+        <div id="new-assignment-fields">
+            <div class="form-group mt-20">
+                <label for="assignment_title">New Assignment Title (if creating new):</label>
+                <input type="text" id="assignment_title" name="assignment_title" class="form-control">
+            </div>
+            <div class="form-group mt-20">
+                <label for="focus">Focus Skills:</label>
+                <input type="text" id="focus" name="focus" class="form-control">
+            </div>
         </div>
         <div class="form-group mt-20">
             <label for="writing_sample">Student Essay:</label>
@@ -41,4 +43,30 @@
     </div>
     {% endif %}
 </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const assignmentSelect = document.getElementById("assignment");
+        const newAssignmentFields = document.getElementById("new-assignment-fields");
+
+        // Toggle new assignment fields based on selected value
+        assignmentSelect.addEventListener("change", () => {
+            if (assignmentSelect.value) {
+                newAssignmentFields.style.display = "none"; // Hide fields for existing assignment
+            } else {
+                newAssignmentFields.style.display = "block"; // Show fields for new assignment
+            }
+        });
+
+        // Initial state
+        if (assignmentSelect.value) {
+            newAssignmentFields.style.display = "none";
+        }
+    });
+</script>
+
 {% endblock %}
