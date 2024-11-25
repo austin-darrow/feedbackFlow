@@ -172,14 +172,4 @@ def analyze_trends(essays: list, assignment_focus: str = None):
     strengths = strengths.split('*')
     weaknesses = weaknesses.split('*')
     additional_comments = additional_comments.split('*')
-    final_response += 'STRENGTHS:<br>'
-    for strength in strengths:
-        final_response += f'* {strength}<br>'
-    final_response += '<br>WEAKNESSES:<br>'
-    for weakness in weaknesses:
-        final_response += f'* {weakness}<br>'
-    final_response += '<br>ADDITIONAL COMMENTS:<br>'
-    for comment in additional_comments:
-        final_response += f'* {comment}<br>'
-
-    return final_response
+    return strengths, weaknesses, additional_comments

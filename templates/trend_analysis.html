@@ -9,7 +9,24 @@
     <div class="analysis-results">
         <!-- Assuming trend_analysis contains keys like 'summary', 'details', etc. -->
         <h3>Key Findings</h3>
-        <p>{{ trend_analysis }}</p>
+        <p>Strengths:</p>
+        <ul>
+            {% for strength in strengths %}
+            <li>{{ strength }}</li>
+            {% endfor %}
+        </ul>
+        <p>Weaknesses:</p>
+        <ul>
+            {% for weakness in weaknesses %}
+            <li>{{ weakness }}</li>
+            {%endfor %}
+        </ul>
+        <p>Additional Comments:</p>
+        <ul>
+            {% for comment in additional_comments %}
+            <li>{{ comment }}</li>
+            {% endfor %}
+        </ul>
         <!-- Display more details as needed -->
     </div>
     {% else %}
