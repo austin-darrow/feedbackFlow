@@ -171,4 +171,8 @@ def analyze_trends(essays: list, assignment_focus: str = None):
     weaknesses = weaknesses.replace('**', '*')
     strengths = strengths.split('*')
     weaknesses = weaknesses.split('*')
+    strengths = [strength.strip() for strength in strengths if strength.strip()]
+    weaknesses = [weakness.strip() for weakness in weaknesses if weakness.strip()]
+    strengths = [strength for strength in strengths if strength != ""]
+    weaknesses = [weakness for weakness in weaknesses if weakness != ""]
     return strengths, weaknesses
