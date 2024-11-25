@@ -125,21 +125,37 @@ def analyze_trends(essays: list, assignment_focus: str = None):
     system_prompt = f'''
     You are a grade school ELA teacher. You have been given a set of student essays to review.
     The focus of the assignment was on {assignment_focus}.
-    Analyze the essays and identify common strengths and weaknesses.
-    Provide a summary of the trends you observed in the student essays.
+    Each of the essays received LLM-generated feedback.
+    Analyze the essays (with their respective feedback) and identify common strengths and weaknesses.
+    They will be formatted as follows:
+    ----------------------------------------
+    Submission #[number]
+    Essay: [essay content]
+    Feedback: [LLM-generated feedback]
+    Provide a summary of the trends you observed in the student essays and feedback.
     Format your response as a bulleted list of 3-5 key points.
     '''
+
+    user_essays = ""
+    for i, essay in enumerate(essays):
+        user_essays += f'''
+        ----------------------------------------
+        Submission #{i + 1}
+        Essay: {essay["content"]}
+        Feedback: {essay["feedback"]}
+        '''
+
     if os.environ.get("MODEL") == "nemotron":
         messages = [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": essays}
+            {"role": "user", "content": user_essays}
         ]
         response = query_openai_api(messages)
 
     elif os.environ.get("MODEL") == "llama":
         messages = [
             SystemMessage(content=system_prompt),
-            UserMessage(content=essays)
+            UserMessage(content=user_essays)
         ]
         response = query_azure_api(messages)
     print("RESPONSE:\n\n")
