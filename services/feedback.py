@@ -165,6 +165,8 @@ def analyze_trends(essays: list, assignment_focus: str = None):
     # Format the response
     strengths = response.split('STRENGTHS:')[1].split('WEAKNESSES:')[0].strip()
     weaknesses = response.split('WEAKNESSES:')[1].split('ADDITIONAL COMMENTS:')[0].strip()
+    strengths = strengths.replace('***', '*')
+    weaknesses = weaknesses.replace('***', '*')
     strengths = strengths.replace('**', '*')
     weaknesses = weaknesses.replace('**', '*')
     strengths = strengths.split('*')
