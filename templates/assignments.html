@@ -44,7 +44,7 @@
         {% endif %}
 
         <div class="actions mt-20">
-            <form action="/analyze_trends" method="post" id="analyze-trends-form-{{ assignment.id }}">
+            <form action="/analyze_trends" method="post" id="analyze-trends-form">
                 <input type="hidden" name="assignment_id" value="{{ assignment.id }}">
                 <button type="submit" class="btn" id="analyze-button-{{ assignment.id }}">Analyze Trends</button>
                 <div id="loading-indicator-{{ assignment.id }}" class="loading-indicator" style="display: none;">
